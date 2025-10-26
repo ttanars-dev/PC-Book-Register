@@ -1,0 +1,3154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC|Book Register v28</title> <link rel="shortcut icon" type="image/png" href="https://img2.pic.in.th/pic/Pakchong_School-removebg-preview.png">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Tom Select for searchable dropdowns -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.css" rel="stylesheet">
+    <!-- DataTables -->
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap5.min.css">
+    <!-- SweetAlert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Bootstrap Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+	
+
+
+    <style>
+        body { font-family: 'Sarabun', sans-serif; background-color: #f0f2f5; }
+        .card { border: none; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .main-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06) !important; }
+        .btn { transition: all 0.3s ease; }
+        .progress { height: 5px; }
+        
+        /* 3. Table hover color - Updated Selector */
+        #docTable.table-hover > tbody > tr:hover > *, 
+        #notifyTable.table-hover > tbody > tr:hover > * { 
+            background-color: #ffffb8 !important; 
+            color: #000 !important; 
+        }
+        /* 3. Table header center */
+        #docTable thead th, #notifyTable thead th {
+            text-align: center;
+            vertical-align: middle;
+        }
+        /* 2. Progress bar text color adjustment */
+        .progress-bar {
+            color: white;
+            font-weight: 500;
+        }
+        /* ========== START: MODIFICATION - Adjust text color for orange (budget) ========== */
+        .progress-bar.bg-info, 
+        .progress-bar.bg-warning,
+        .progress-bar.bg-budget { /* Added bg-budget */
+            color: #212529 !important; /* Dark text for light backgrounds */
+        }
+        /* ========== END: MODIFICATION ========== */
+        
+        /* ========== START: MODIFICATION 1 - Add styles for forwardTo ========== */
+        .progress-bar.bg-academic { background-color: #6f42c1 !important; } /* Purple */
+        .progress-bar.bg-budget { background-color: #fd7e14 !important; }   /* Orange */
+        .progress-bar.bg-personnel { background-color: #20c997 !important; } /* Teal */
+        .progress-bar.bg-general { background-color: #0dcaf0 !important; }   /* Cyan */
+        /* ========== END: MODIFICATION 1 ========== */
+
+
+        .filters-container { padding: 1rem; background-color: #f8f9fa; border-radius: .375rem; margin-bottom: 1rem; }
+        .nav-pills .nav-link.active, .nav-pills .show>.nav-link { background-color: #0d6efd; color: white; box-shadow: 0 4px 8px rgba(13, 110, 253, 0.3); }
+        .dt-buttons .btn { margin-left: 5px; }
+        .form-section { border: 2px solid #dc3545; padding: 1.5rem; margin-top: 1rem; border-radius: .375rem; position: relative; }
+        .form-section-title { position: absolute; top: -0.75rem; left: 1rem; background-color: white; padding: 0 0.5rem; font-weight: 500; color: #dc3545; }
+        .file-upload-wrapper { border: 2px dashed #adb5bd; border-radius: .375rem; padding: 2rem; text-align: center; cursor: pointer; transition: border-color 0.3s ease, background-color 0.3s ease; }
+        .file-upload-wrapper:hover, .file-upload-wrapper.dragover { border-color: #0d6efd; background-color: #f8f9fa; }
+        .file-upload-icon { font-size: 3rem; color: #6c757d; }
+        #fileNameDisplay { margin-top: 1rem; font-weight: 500; background-color: #e9ecef; padding: .5rem 1rem; border-radius: .25rem; }
+        .stepper-wrapper { display: flex; justify-content: space-between; margin-top: 2rem; }
+        .stepper-item { position: relative; display: flex; flex-direction: column; align-items: center; flex: 1; }
+        .stepper-item::before, .stepper-item::after { position: absolute; content: ""; border-bottom: 2px solid #ccc; width: 100%; top: 20px; z-index: 2; }
+        .stepper-item::before { left: -50%; }
+        .stepper-item::after { left: 50%; }
+        .stepper-item .step-counter { position: relative; z-index: 5; display: flex; justify-content: center; align-items: center; width: 40px; height: 40px; border-radius: 50%; background: #ccc; margin-bottom: 6px; color: white; font-weight: bold; }
+        .stepper-item.active .step-counter, .stepper-item.completed .step-counter { background-color: #198754; }
+        .stepper-item.completed::after { border-bottom: 2px solid #198754; }
+        .stepper-item:first-child::before, .stepper-item:last-child::after { content: none; }
+        #signature-pad { border: 1px solid #ced4da; border-radius: .25rem; cursor: crosshair; max-width: 100%; }
+        .status-progress-bar-wrapper { cursor: pointer; }
+        .step-name { font-size: 0.85rem; text-align: center; }
+        .step-date { font-size: 0.75rem; color: red; margin-top: 2px; }
+
+        /* ========== START: MODIFICATION - Add modal header background color ========== */
+        #editCommentModal .modal-header,
+        #statusModal .modal-header,
+        #viewCommentModal .modal-header { /* Added viewCommentModal */
+            background-color: #FF0066;
+            color: white; /* Change text color for better contrast */
+        }
+        #editCommentModal .modal-header .btn-close,
+        #statusModal .modal-header .btn-close,
+        #viewCommentModal .modal-header .btn-close { /* Added viewCommentModal */
+            filter: brightness(0) invert(1); /* Make the close button white */
+        }
+        /* ========== END: MODIFICATION ========== */
+
+        /* ========== START: MODIFICATION - Priority Colors ========== */
+        #priority option[value="ปกติ"] { color: blue; font-weight: 500; }
+        #priority option[value="ด่วน"] { color: red; font-weight: 500; }
+        #priority option[value="ด่วนมาก"] { color: red; font-weight: 500; }
+        #priority option[value="ด่วนที่สุด"] { color: red; font-weight: 500; }
+        /* ========== END: MODIFICATION ========== */
+
+        /* ========== START: MODIFICATION - Dashboard Card Style ========== */
+        .summary-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            border-radius: 0.5rem; /* 8px rounded corners */
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        .summary-card-content {
+            text-align: left;
+        }
+        .summary-card-title {
+            font-size: 0.9rem; /* 14px */
+            margin-bottom: 0;
+            line-height: 1.2;
+        }
+        .summary-card-value {
+            font-size: 2rem; /* 32px */
+            font-weight: 700;
+        }
+        .summary-card-icon {
+            font-size: 3rem; /* 48px */
+            opacity: 0.6;
+        }
+        /* ========== END: MODIFICATION ========== */
+
+        /* ========== START: FIX - AI Modal Z-Index ========== */
+        /*
+         * แก้ไขปัญหา Modal AI (aiPdfSummaryModal) และ Modal ยืนยัน (aiVerificationModal)
+         * ไม่แสดงทับ Modal ลงทะเบียน (registerModal) ที่เป็นแบบ fullscreen
+         * โดยการกำหนด z-index ให้สูงกว่า
+        */
+        #aiPdfSummaryModal,
+        #aiVerificationModal {
+            z-index: 1060 !important; 
+        }
+        /* ========== END: FIX - AI Modal Z-Index ========== */
+
+        /* ========== START: MODIFICATION - Style for Status Modal Tabs (User Request) ========== */
+        #statusModal .nav-tabs {
+            border-bottom: 3px solid #ffc107; /* warning color border */
+        }
+        #statusModal .nav-tabs .nav-link {
+            color: white; /* Text color for inactive */
+            background-color: #6c757d; /* secondary color */
+            border: 1px solid #6c757d;
+            border-bottom: none; /* Remove bottom border from tab itself */
+            margin-right: 2px;
+        }
+        #statusModal .nav-tabs .nav-link.active {
+            color: #000; /* Text color for active (dark) */
+            background-color: #ffc107; /* warning color */
+            border-color: #ffc107 #ffc107 #ffc107; /* Match warning color */
+            font-weight: 500;
+        }
+        #statusModal .tab-content {
+            border: 1px solid #dee2e6;
+            border-top: none;
+            padding: 1.5rem 1rem;
+            border-bottom-left-radius: .375rem;
+            border-bottom-right-radius: .375rem;
+        }
+        /* ========== END: MODIFICATION ========== */
+    </style>
+</head>
+<body class="bg-light">
+
+    <div class="progress" id="loading-progress-container" style="position: fixed; top: 0; left: 0; width: 100%; z-index: 9999;">
+        <div id="loading-progress" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 100%"></div>
+    </div>
+
+    <div class="container-fluid p-4 p-md-5">
+        <header class="mb-4 text-center">
+            <h3 class="display-5 fw-bold text-primary animate__animated animate__fadeInDown">ระบบแจ้งเวียนหนังสือราชการ</h3>
+            <p class="text-muted fs-4 animate__animated animate__fadeInUp" style="font-weight: 700;">โรงเรียนปากช่อง จังหวัดนครราชสีมา</p>
+		<div class="text-center mb-4 no-print">
+        <marquee behavior="scroll" direction="left" style="color:#000000; font-size: 20px;" onmouseover="this.stop();" onmouseout="this.start();"> ยินดีต้อนรับเข้าสู่ระบบทะเบียนหนังสือรับ โรงเรียนปากช่อง :: ออกแบบและพัฒนาโดย KT | Tanasarn Sirak </marquee>
+		</div>
+		<canvas id="clockCanvas" height="50" class="container-fluid bg-secondary text-white p-2 rounded shadow-sm"></canvas>
+        </header>    	
+
+
+        <div class="card shadow-sm main-card animate__animated animate__fadeIn">
+            <div class="card-body p-lg-4">
+                <ul class="nav nav-pills nav-fill mb-4" id="pills-tab" role="tablist">
+                    <!-- 1 & 2: Hide Register Tab, Make Notify Active -->
+                    <li class="nav-item" role="presentation"><button class="nav-link active" id="pills-notify-tab" data-bs-toggle="pill" data-bs-target="#pills-notify" type="button"><i class="fas fa-paper-plane me-2"></i>แจ้งหนังสือรับ</button></li>
+                    <li class="nav-item" role="presentation"><button class="nav-link" id="pills-list-tab" data-bs-toggle="pill" data-bs-target="#pills-list" type="button"><i class="fas fa-list-ul me-2"></i>รายการหนังสือ</button></li>
+                </ul>
+
+                <div class="tab-content" id="pills-tabContent">
+                    <!-- pills-register content moved to modal below -->
+                    
+                    <div class="tab-pane fade" id="pills-list" role="tabpanel">
+                        
+                        <!-- ========== START: MODIFICATION - Add Summary Cards for List View ========== -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-lg col-md-4 col-6">
+                                <div class="summary-card bg-primary">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">ทั้งหมด</p>
+                                        <h3 class="summary-card-value" id="list-summary-total">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-layer-group"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg col-md-4 col-6">
+                                <div class="summary-card bg-success">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">วันนี้</p>
+                                        <h3 class="summary-card-value" id="list-summary-today">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-calendar-day"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg col-md-4 col-6">
+                                <div class="summary-card bg-info text-dark">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">เมื่อวาน</p>
+                                        <h3 class="summary-card-value" id="list-summary-yesterday">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-calendar-minus"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg col-md-6 col-6">
+                                <div class="summary-card bg-warning text-dark">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">สัปดาห์นี้</p>
+                                        <h3 class="summary-card-value" id="list-summary-week">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-calendar-week"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg col-md-6 col-12">
+                                <div class="summary-card bg-danger">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">เดือนนี้</p>
+                                        <h3 class="summary-card-value" id="list-summary-month">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-calendar-alt"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ========== END: MODIFICATION ========== -->
+
+                        <!-- 5. Removed statusFilter dropdown and adjusted columns -->
+                        <!-- ========== START: MODIFICATION 2.1 - Add Year Filter (docTable) ========== -->
+                        <div class="filters-container">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-md-5"><input type="text" id="titleSearch" class="form-control" placeholder="ค้นหาตามชื่อเรื่อง..."></div>
+                                <div class="col-md-3"><select id="priorityFilter" class="form-select"><option value="">-- ทุกระดับความสำคัญ --</option></select></div>
+                                <div class="col-md-2"><select id="docYearFilter" class="form-select"><option value="">-- ทุกปี พ.ศ. --</option></select></div>
+                                <div class="col-md-2 d-grid"><button class="btn btn-danger" id="docListResetFilters"><i class="fas fa-sync-alt me-2"></i>รีเซ็ต</button></div>
+                            </div>
+                        </div>
+                        <!-- ========== END: MODIFICATION 2.1 ========== -->
+
+                        <!-- 3. Added table-hover class -->
+                        <!-- ========== START: MODIFICATION - Removed 'ไฟล์แนบ' header from docTable ========== -->
+                        <div class="table-responsive"><table id="docTable" class="table table-striped table-bordered table-hover w-100"><thead class="table-dark"><tr><th>ที่</th><th>เรื่อง</th><th>ประเภทหนังสือ</th><th>ความสำคัญ</th><th>วันที่รับ</th><th>กลุ่ม/งาน</th><th>สถานะ</th></tr></thead><tbody></tbody></table></div>
+                        <!-- ========== END: MODIFICATION ========== -->
+                    </div>
+                    <div class="tab-pane fade show active" id="pills-notify" role="tabpanel">
+                        
+                        <!-- ========== START: MODIFICATION - Layout Update for 4 Cards ========== -->
+                        <!-- 1. Summary Cards -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="summary-card bg-primary">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">ทั้งหมด</p>
+                                        <h3 class="summary-card-value" id="summary-card-total">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-layer-group"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="summary-card bg-info text-dark">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">แจ้งผู้เกี่ยวข้อง</p>
+                                        <h3 class="summary-card-value" id="summary-card-notify">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-info-circle"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="summary-card bg-warning text-dark">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">กำลังดำเนินการ</p>
+                                        <h3 class="summary-card-value" id="summary-card-inprogress">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-tasks"></i></div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-6">
+                                <div class="summary-card bg-success">
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">เสร็จสิ้น</p>
+                                        <h3 class="summary-card-value" id="summary-card-completed">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-check-circle"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ========== END: MODIFICATION ========== -->
+
+                        <!-- ========== START: MODIFICATION - Chart Layout Update (2 Columns) ========== -->
+                        <div class="row g-3 mb-3">
+                            <!-- Column 1: Doughnut Chart -->
+                            <div class="col-lg-5">
+                                <div class="card shadow mb-2 bg-body rounded">
+                                    <!-- Card Header with Icon -->
+                                    <div class="card-header bg-secondary pt-3 pb-3">
+                                        <h5 class="mb-0 fw-bold d-flex align-items-center text-white">
+                                            <i class="fas fa-chart-pie me-2"></i>
+                                            สรุปสถานะการดำเนินการ
+                                        </h5>
+                                    </div>
+                                    <div class="card-body d-flex align-items-center justify-content-center">
+                                        <div style="height: 300px; width: 100%;">
+                                            <canvas id="statusDoughnutChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Column 2: Bar Chart -->
+                            <div class="col-lg-7">
+                                <div class="card shadow mb-2 bg-body rounded">
+                                     <!-- Card Header with Icon -->
+                                    <div class="card-header bg-secondary pt-3 pb-3">
+                                        <h5 class="mb-0 fw-bold d-flex align-items-center text-white">
+                                            <i class="fas fa-chart-bar me-2"></i>
+                                            สรุปข้อมูลตามกลุ่มงานที่มอบหมาย
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div style="height: 300px;">
+                                            <canvas id="groupChart"></canvas>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ========== END: MODIFICATION ========== -->
+                        
+                        <!-- ========== START: MODIFICATION 1.1 - Adjusted Filters Layout (2 Rows) ========== -->
+                        <div class="filters-container shadow mb-2 bg-body rounded">
+                            <!-- Row 1: Search, Date, Year, ForwardTo -->
+                            <div class="row g-3 mb-2 align-items-center">
+                                <div class="col-lg-3 col-md-6"><input type="text" id="notifyReceiptSearch" class="form-control" placeholder="ค้นหาเลขที่รับ/เรื่อง..."></div>
+                                <div class="col-lg-3 col-md-6"><select id="notifyDateSearch" class="form-select"><option value="all" selected>-- วันที่รับทั้งหมด --</option><option value="today">วันนี้</option><option value="7days">7 วันที่ผ่านมา</option><option value="thismonth">เดือนนี้</option><option value="thisyear">ปีนี้</option></select></div>
+                                <div class="col-lg-3 col-md-6"><select id="notifyYearFilter" class="form-select"><option value="">-- ทุกปี พ.ศ. --</option></select></div>
+                                <!-- <div class="col-lg-3 col-md-6"><select id="notifyForwardToFilter" class="form-select" placeholder="ค้นหาผู้รับ..."></select></div> -->
+                                
+                                <!-- ========== START: MODIFICATION - Convert TomSelect to Standard Select ========== -->
+                                <div class="col-lg-3 col-md-6">
+                                    <select id="notifyForwardToFilter" class="form-select">
+                                        <option value="">-- ค้นหาผู้รับ... --</option>
+                                        <option value="กลุ่มงานการจัดการศึกษา">กลุ่มงานการจัดการศึกษา</option>
+                                        <option value="กลุ่มงานพัฒนาโครงการพิเศษ">กลุ่มงานพัฒนาโครงการพิเศษ</option>
+                                        <option value="กลุ่มงานอำนวยการ">กลุ่มงานอำนวยการ</option>
+                                        <option value="กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์">กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์</option>
+                                        <option value="กลุ่มงานบุคลากร">กลุ่มงานบุคลากร</option>
+                                        <option value="กลุ่มงานชุมชนและภาคีเครือข่าย">กลุ่มงานชุมชนและภาคีเครือข่าย</option>
+                                        <option value="กลุ่มงานกิจการนักเรียน">กลุ่มงานกิจการนักเรียน</option>
+                                        <option value="กลุ่มงานอาคารสถานที่และสภาพแวดล้อม">กลุ่มงานอาคารสถานที่และสภาพแวดล้อม</option>
+                                    </select>
+                                </div>
+                                <!-- ========== END: MODIFICATION ========== -->
+                            </div>
+                            <!-- Row 2: Priority, Status, Reset, Register Button -->
+                            <div class="row g-3 align-items-center">
+                                <div class="col-lg-3 col-md-6"><select id="notifyPriorityFilter" class="form-select"><option value="">-- ทุกระดับความสำคัญ --</option></select></div>
+                                <div class="col-lg-3 col-md-6"><select id="notifyStatusFilter" class="form-select"><option value="">-- ทุกสถานะ --</option></select></div>
+                                <div class="col-lg-6 col-md-12 d-flex justify-content-end gap-2">
+                                    <button class="btn btn-danger" id="notifyResetFilters"><i class="fas fa-sync-alt me-2"></i>รีเซ็ต</button>
+                                    <!-- Reload Button Removed -->
+                                    <button class="btn btn-primary" id="openRegisterModalBtn"><i class="fas fa-plus me-2"></i>ลงทะเบียนหนังสือรับ</button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ========== END: MODIFICATION 1.1 ========== -->
+                        <!-- 3. Added table-hover class -->
+                        <!-- ========== START: MODIFICATION 1 - Changed table header (thead) ========== -->
+                        <div class="table-responsive"><table id="notifyTable" class="table table-striped table-bordered table-hover w-100">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>รับที่</th>
+                                    <th>วันที่รับ</th>
+                                    <th>เรื่อง</th>
+                                    <th>ความสำคัญ</th>
+                                    <th>ความเห็น ผอ.</th>
+                                    <th>มอบหมาย</th>
+                                    <th>สถานะ</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table></div>
+                        <!-- ========== END: MODIFICATION 1 ========== -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="aiPdfSummaryModal" tabindex="-1" aria-labelledby="aiPdfSummaryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="aiPdfSummaryModalLabel"><i class="fas fa-robot me-2"></i> กรอกข้อมูลด้วย AI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>ต้องการให้ AI ช่วยกรอกข้อมูลจากหน้าแรกของไฟล์ PDF ที่แนบมาหรือไม่?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" id="confirmPdfSummaryAI">ตกลง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="aiVerificationModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i> ตรวจสอบข้อมูลจาก AI</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="text-center mb-3 border p-2 rounded bg-light">
+                        <p class="fw-bold mb-1">ตัวอย่างส่วนหัวจากเอกสาร:</p>
+                        <canvas id="aiVerifyCanvas" class="rounded" style="max-width: 100%;">
+                    </div>
+                    <p class="text-danger">กรุณาตรวจสอบความถูกต้องของเลขที่หนังสือ และแก้ไขให้ถูกต้อง</p>
+                    <div class="mb-3">
+                        <label for="aiVerifyNumber" class="form-label">เลขที่หนังสือ</label>
+                        <input type="text" class="form-control" id="aiVerifyNumber">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <button type="button" class="btn btn-primary" id="confirmAiData">ยืนยันข้อมูล</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== START: MODIFICATION - Update Status Modal with Tabs ========== -->
+    <div class="modal fade" id="statusModal" tabindex="-1">
+        <div class="modal-dialog modal-lg"> <!-- Make modal larger for tabs -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-tasks me-2"></i>การดำเนินการ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="statusDocId">
+                    <div class="mb-3">
+                        <label class="form-label">วันที่บันทึก</label>
+                        <input type="text" class="form-control" id="statusRecordDate" readonly>
+                    </div>
+                    <div class="mb-4" id="statusStepperContainer"></div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="statusTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="status-tab-director" data-bs-toggle="tab" data-bs-target="#statusTabDirComment" type="button" role="tab" aria-controls="statusTabDirComment" aria-selected="true">
+                                <i class="fas fa-user-tie me-2"></i>ความเห็น ผอ.
+                                <!-- START: MODIFICATION (Req 3) - Add checkmark placeholder -->
+                                <span class="deputy-saved-check ms-2 d-none"><i class="fas fa-check-circle text-success"></i></span>
+                                <!-- END: MODIFICATION -->
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="status-tab-deputy" data-bs-toggle="tab" data-bs-target="#statusTabDeputyComment" type="button" role="tab" aria-controls="statusTabDeputyComment" aria-selected="false">
+                                <i class="fas fa-user-friends me-2"></i>ความเห็นรองฯ
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="status-tab-action" data-bs-toggle="tab" data-bs-target="#statusTabAction" type="button" role="tab" aria-controls="statusTabAction" aria-selected="false">
+                                <i class="fas fa-play-circle me-2"></i>การดำเนินการ
+                                <!-- START: MODIFICATION (Req 3) - Add checkmark placeholder -->
+                                <span class="deputy-saved-check ms-2 d-none"><i class="fas fa-check-circle text-success"></i></span>
+                                <!-- END: MODIFICATION -->
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" id="statusTabContent">
+                        <!-- Tab 1: Director's Comment (Read-only) -->
+                        <div class="tab-pane fade show active" id="statusTabDirComment" role="tabpanel" aria-labelledby="status-tab-director">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">มอบหมายกลุ่ม/งาน:</label>
+                                <p id="statusDirForwardTo" class="form-control-plaintext bg-light p-2 rounded">-</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">การดำเนินการ:</label>
+                                <p id="statusDirActions" class="form-control-plaintext bg-light p-2 rounded">-</p>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">ความเห็นเพิ่มเติม (ผอ.):</label>
+                                <p id="statusDirCommentText" class="form-control-plaintext bg-light p-2 rounded" style="min-height: 50px;">-</p>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Deputy Director's Comment (New Fields) -->
+                        <div class="tab-pane fade" id="statusTabDeputyComment" role="tabpanel" aria-labelledby="status-tab-deputy">
+                            <fieldset id="deputyFieldset"> <!-- Use fieldset for disabling -->
+                                <div class="form-check mb-3">
+                                    <!-- START: MODIFICATION (Req 3) - Add icon placeholder -->
+                                    <span class="deputy-saved-icon d-none"><i class="fas fa-check-circle text-success me-2 align-middle"></i></span>
+                                    <input class="form-check-input align-middle" type="checkbox" value="true" id="deputyAck">
+                                    <!-- END: MODIFICATION (Req 3) -->
+                                    <label class="form-check-label fw-bold align-middle" for="deputyAck">
+                                        ทราบ, เห็นควรดำเนินการ
+                                    </label>
+                                    <!-- START: MODIFICATION (Req 4) - Add Read More link -->
+                                    <a href="#" id="deputyFileLink" target="_blank" class="badge bg-danger text-decoration-none ms-3 align-middle" style="display: none;">
+                                        อ่านเพิ่มเติม <i class="fas fa-external-link-alt ms-1"></i>
+                                    </a>
+                                    <!-- END: MODIFICATION (Req 4) -->
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deputyComment" class="form-label">ความเห็นเพิ่มเติม</label>
+                                    <textarea class="form-control" id="deputyComment" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="deputyAssign" class="form-label">มอบหมาย (ผู้รับผิดชอบ)</label>
+                                    <!-- <input type="text" class="form-control" id="deputyAssign" placeholder="ใส่ชื่อ สกุล"> -->
+									<select id="deputyAssign" placeholder="ค้นหาผู้รับผิดชอบ..."></select>
+                                </div>
+                            </fieldset>
+                            <!-- ========== START: MODIFICATION - Add Recorder ID for Deputy ========== -->
+                            <div class="mb-3 d-none" id="deputyRecorderIdContainer">
+                                <label for="deputyRecorderId" class="form-label">รหัสผู้บันทึก (รองฯ)</label>
+                                <input type="text" class="form-control" id="deputyRecorderId" placeholder="กรอกรหัสเพื่อยืนยัน...">
+                            </div>
+                            <!-- ========== END: MODIFICATION ========== -->
+                        </div>
+
+                        <!-- Tab 3: Action (Original Content) -->
+                        <div class="tab-pane fade" id="statusTabAction" role="tabpanel" aria-labelledby="status-tab-action">
+                            <fieldset id="statusFieldset">
+                                <div class="mb-3">
+                                    <label class="form-label">สถานะ</label>
+                                    <div>
+                                        <input type="radio" class="btn-check" name="statusOptions" id="statusInProgress" value="กำลังดำเนินการ">
+                                        <label class="btn btn-outline-warning" for="statusInProgress">กำลังดำเนินการ</label>
+                                        
+                                        <input type="radio" class="btn-check" name="statusOptions" id="statusCompleted" value="เสร็จสิ้น">
+                                        <label class="btn btn-outline-success" for="statusCompleted">เสร็จสิ้น</label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="responsiblePerson" class="form-label">ผู้รับผิดชอบ</label>
+                                    <input type="text" class="form-control" Style="background-color:#ccc;" id="responsiblePerson" placeholder="กรอกชื่อผู้รับผิดชอบ... (ดึงมาจากความเห็นรองฯ)" readonly>
+                                </div>
+                                <!-- ========== START: MODIFICATION (USER REQUEST) - Add Completion Notes Textarea ========== -->
+                                <div class="mb-3 d-none" id="completionNotesContainer">
+                                    <label for="completionNotes" class="form-label">บันทึกการดำเนินการ (หมายเหตุ)</label>
+                                    <textarea class="form-control" id="completionNotes" rows="3" placeholder="ระบุรายละเอียดการดำเนินการ..."></textarea>
+                                </div>
+                                <!-- ========== END: MODIFICATION (USER REQUEST) ========== -->
+                                <div class="mb-3 d-none" id="expectedDateContainer">
+                                    <label for="expectedDate" class="form-label">วันที่คาดว่าจะเสร็จ</label>
+                                    <input type="text" class="form-control" id="expectedDate">
+                                </div>
+                            </fieldset>
+                            <!-- ========== START: MODIFICATION - Moved Recorder ID outside fieldset ========== -->
+                            <div class="mb-3 d-none" id="recorderIdContainer">
+                                <label for="recorderId" class="form-label">รหัสผู้บันทึก</label>
+                                <input type="text" class="form-control" id="recorderId" placeholder="กรอกรหัสเพื่อยืนยัน...">
+                            </div>
+                            <!-- ========== END: MODIFICATION ========== -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                    <!-- ========== START: MODIFICATION - Renamed button ID ========== -->
+                    <button type="button" class="btn btn-primary" id="saveStatusModalBtn">บันทึก</button>
+                    <!-- ========== END: MODIFICATION ========== -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ========== END: MODIFICATION ========== -->
+
+
+    <div class="modal fade" id="editCommentModal" tabindex="-1"><div class="modal-dialog modal-lg"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title"><i class="fas fa-gavel me-2"></i>ความเห็นผู้อำนวยการ</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+            <form id="commentForm">
+                <input type="hidden" id="commentDocId">
+                <div class="mb-3">
+                    <label class="form-label">เรื่อง</label>
+                    <div id="commentBookTitle" class="form-control" style="background-color: #e9ecef;"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">วันที่ลงความเห็น</label>
+                    <input type="text" class="form-control" id="commentDate" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">สรุปสาระสำคัญ</label>
+                    <!-- ========== START: MODIFICATION 1.2 - Add file link placeholder ========== -->
+                    <a id="commentFileLink" href="#" target="_blank" class="badge bg-danger text-decoration-none ms-2" style="display: none;">อ่านเพิ่มเติม <i class="fas fa-external-link-alt ms-1"></i></a>
+                    <!-- ========== END: MODIFICATION 1.2 ========== -->
+                    <div id="commentSummaryDisplay" class="form-control" style="height: auto; background-color: #e9ecef;"></div>
+                </div>
+                <div class="mb-3">
+                    <label for="commentForwardTo" class="form-label">มอบหมายกลุ่ม/งาน</label>
+                    <select id="commentForwardTo" name="forwardTo" class="form-select" required>
+                        <option value="">เลือกกลุ่มงาน/กลุ่มสาระฯ...</option>
+                        <option value="กลุ่มงานการจัดการศึกษา">กลุ่มงานการจัดการศึกษา</option>
+                        <option value="กลุ่มงานพัฒนาโครงการพิเศษ">กลุ่มงานพัฒนาโครงการพิเศษ</option>
+                        <option value="กลุ่มงานอำนวยการ">กลุ่มงานอำนวยการ</option>
+                        <option value="กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์">กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์</option>
+                        <option value="กลุ่มงานบุคลากร">กลุ่มงานบุคลากร</option>
+                        <option value="กลุ่มงานชุมชนและภาคีเครือข่าย">กลุ่มงานชุมชนและภาคีเครือข่าย</option>
+                        <option value="กลุ่มงานกิจการนักเรียน">กลุ่มงานกิจการนักเรียน</option>
+                        <option value="กลุ่มงานอาคารสถานที่และสภาพแวดล้อม">กลุ่มงานอาคารสถานที่และสภาพแวดล้อม</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">การดำเนินการ</label>
+                    <div>
+                        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="actionAck" value="ทราบ"><label class="form-check-label" for="actionAck">ทราบ</label></div>
+                        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="actionAllow" value="อนุญาต"><label class="form-check-label" for="actionAllow">อนุญาต</label></div>
+                        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="actionApprove" value="อนุมัติ"><label class="form-check-label" for="actionApprove">อนุมัติ</label></div>
+                        <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="actionProceed" value="ดำเนินการตามเสนอ"><label class="form-check-label" for="actionProceed">ดำเนินการตามเสนอ</label></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="directorComment" class="form-label">ความเห็นเพิ่มเติม</label>
+                    <textarea class="form-control" id="directorComment" rows="3"></textarea>
+                </div>
+                <div class="mb-3 d-flex flex-column align-items-center">
+                    <label class="form-label">ลงลายมือชื่อ</label>
+                    <canvas id="signature-pad" width="400" height="150"></canvas>
+                    <!-- ========== START: MODIFICATION - Add Load Signature Button ========== -->
+                    <div class="mt-2">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-signature"><i class="fas fa-eraser me-1"></i> รีเซ็ต</button>
+                        <button type="button" class="btn btn-primary btn-sm ms-2" id="load-signature"><i class="fas fa-file-image me-1"></i> ใช้ลายเซ็น</button>
+                    </div>
+                    <!-- ========== END: MODIFICATION ========== -->
+                </div>
+                <div class="mb-3">
+                    <label for="recordId" class="form-label">รหัสบันทึก</label>
+                    <input type="text" class="form-control" id="recordId" placeholder="กรอกรหัสเพื่อยืนยัน...">
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button><button type="button" class="btn btn-primary" id="saveCommentBtn">บันทึก</button></div>
+    </div></div></div>
+    <div class="modal fade" id="viewCommentModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content">
+        <div class="modal-header"><h5 class="modal-title"><i class="fas fa-search me-2"></i>รายละเอียดความเห็น</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+        <div class="modal-body">
+            <p><strong>เรื่อง:</strong> <span id="viewBookTitle"></span></p>
+            <p><strong>วันที่ให้ความเห็น:</strong> <span id="viewCommentDate"></span></p>
+            <p><strong>สรุปสาระสำคัญ:</strong>
+                <!-- START: MODIFICATION (Req 2) - Add Read More link -->
+                <a id="viewCommentFileLink" href="#" target="_blank" class="badge bg-danger text-decoration-none ms-2" style="display: none;">
+                    อ่านเพิ่มเติม <i class="fas fa-external-link-alt ms-1"></i>
+                </a>
+                <!-- END: MODIFICATION (Req 2) -->
+            </p>
+            <!-- START: MODIFICATION - Removed white-space: pre-wrap -->
+            <p class="bg-light p-2 rounded" id="viewSummaryText"></p>
+            <!-- END: MODIFICATION -->
+            <p><strong>การดำเนินการ:</strong> <span id="viewActions"></span></p>
+            <p><strong>ความเห็นเพิ่มเติม:</strong></p><p class="bg-light p-2 rounded" id="viewCommentText"></p>
+            <p><strong>ลายมือชื่อ:</strong></p><img id="viewSignature" class="img-fluid border rounded" alt="Signature">
+        </div>
+        <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button></div>
+    </div></div></div>
+
+    <!-- New Register Book Modal (Full screen) -->
+    <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="registerModalLabel"><i class="fas fa-file-alt me-2"></i> ลงทะเบียนหนังสือรับ</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" style="filter: brightness(0) invert(1);"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Original content of pills-register, excluding the outer div -->
+                    <!-- 4. Add novalidate for Bootstrap validation -->
+                    <form id="docForm" name="docForm" novalidate>
+                        <div class="form-section mb-4">
+                            <h6 class="form-section-title">1. ข้อมูลหนังสือรับ</h6>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label for="number" class="form-label">เลขที่หนังสือ</label>
+                                    <input type="text" class="form-control" id="number" name="number" placeholder="เช่น ศธ 0101/1234" required data-bs-toggle="tooltip" title="กรอกเลขที่หนังสือรับเข้า">
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณากรอกเลขที่หนังสือ</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="title" class="form-label">เรื่อง</label>
+                                    <input type="text" class="form-control" id="title" name="title" placeholder="ระบุชื่อเรื่อง" required data-bs-toggle="tooltip" title="หัวข้อของเอกสาร">
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณากรอกชื่อเรื่อง</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="from" class="form-label">จาก</label>
+                                    <input type="text" class="form-control" id="from" name="from" placeholder="หน่วยงานต้นทาง" required>
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณาระบุหน่วยงานต้นทาง</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="to" class="form-label">ถึง</label>
+                                    <input type="text" class="form-control" id="to" name="to" placeholder="หน่วยงาน/ผู้รับปลายทาง" required>
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณาระบุหน่วยงาน/ผู้รับปลายทาง</div>
+                                </div>
+                                <div class="col-md-6"><label for="category" class="form-label">ประเภทหนังสือ</label><select id="category" name="category" class="form-select"><option value="หนังสือราชการ">หนังสือราชการ</option><option value="หนังสือสั่งการ">หนังสือสั่งการ</option><option value="บันทึกข้อความ">บันทึกข้อความ</option><option value="คำสั่ง">คำสั่ง</option><option value="ประกาศ">ประกาศ</option><option value="อื่นๆ">อื่นๆ</option></select></div>
+                                <!-- ========== START: MODIFICATION - Add values to priority options ========== -->
+                                <div class="col-md-6"><label for="priority" class="form-label">ระดับความสำคัญ</label><select id="priority" name="priority" class="form-select">
+                                    <option value="ปกติ">ปกติ</option>
+                                    <option value="ด่วน">ด่วน</option>
+                                    <option value="ด่วนมาก">ด่วนมาก</option>
+                                    <option value="ด่วนที่สุด">ด่วนที่สุด</option>
+                                </select></div>
+                                <!-- ========== END: MODIFICATION ========== -->
+                                <div class="col-12">
+                                    <label for="summary" class="form-label">สรุปสาระสำคัญ</label>
+                                    <textarea class="form-control" id="summary" name="summary" rows="3" placeholder="สรุปเนื้อหาโดยย่อ... หรือแนบไฟล์ PDF เพื่อให้ AI กรอกข้อมูลอัตโนมัติ"></textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label for="fileUpload" class="form-label">แนบไฟล์หนังสือ (PDF เท่านั้น)</label>
+                                    <input type="file" id="fileUpload" name="fileUpload" class="form-control" accept="application/pdf">
+                                    <div id="fileNameDisplay" class="mt-2 d-none alert alert-success p-2"></div>
+                                    <div id="pdf-preview-container" class="mt-2 d-none text-center">
+                                        <canvas id="pdf-canvas" class="border rounded shadow-sm" style="max-width: 100%;"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h6 class="form-section-title">2. การดำเนินการ</h6>
+                            <div class="row g-3">
+                                <div class="col-md-4"><label for="receiptNumber" class="form-label">เลขที่รับ</label><input type="text" class="form-control" id="receiptNumber" name="receiptNumber" required readonly></div>
+                                <div class="col-md-4">
+                                    <label for="dateReceived" class="form-label">วัน เดือน ปี ที่รับ</label>
+                                    <input type="text" class="form-control" id="dateReceived" name="dateReceived" required>
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณาเลือกวันที่รับ</div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="receiver" class="form-label">ผู้รับ</label>
+                                    <!-- <input type="text" class="form-control" id="receiver" name="receiver" required> -->
+									<select id="receiver" name="receiver" required></select>
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณากรอกชื่อผู้รับ</div>
+                                </div>
+                                <div class="col-md-4"><label for="forwardTo" class="form-label">ถึง (กลุ่ม/กลุ่มงาน)</label><select id="forwardTo" name="forwardTo" placeholder="เลือกกลุ่มงาน/กลุ่มสาระฯ..." required><option value="">เลือกกลุ่มงาน/กลุ่มสาระฯ...</option>
+                                    <option value="กลุ่มงานการจัดการศึกษา">กลุ่มงานการจัดการศึกษา</option>
+                                    <option value="กลุ่มงานพัฒนาโครงการพิเศษ">กลุ่มงานพัฒนาโครงการพิเศษ</option>
+                                    <option value="กลุ่มงานอำนวยการ">กลุ่มงานอำนวยการ</option>
+                                    <option value="กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์">กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์</option>
+                                    <option value="กลุ่มงานบุคลากร">กลุ่มงานบุคลากร</option>
+                                    <option value="กลุ่มงานชุมชนและภาคีเครือข่าย">กลุ่มงานชุมชนและภาคีเครือข่าย</option>
+                                    <option value="กลุ่มงานกิจการนักเรียน">กลุ่มงานกิจการนักเรียน</option>
+                                    <option value="กลุ่มงานอาคารสถานที่และสภาพแวดล้อม">กลุ่มงานอาคารสถานที่และสภาพแวดล้อม</option>
+                                </select>
+								<!-- 5. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณากรอกชื่อกลุ่ม/กลุ่มงาน</div></div>
+                                <div class="col-md-4"><label for="assignTo" class="form-label">มอบหมาย</label><input type="text" class="form-control" id="assignTo" name="assignTo"></div>
+                                <div class="col-md-4"><label for="dueDate" class="form-label">กำหนดดำเนินการ</label><input type="text" class="form-control" id="dueDate" name="dueDate" placeholder="เลือกวันที่"></div>
+                                <div class="col-md-8"><label for="remarks" class="form-label">หมายเหตุ (ถ้ามี)</label><input type="text" class="form-control" id="remarks" name="remarks"></div>
+                                <!-- ========== START: MODIFICATION - Removed 'รอตอบรับ' option ========== -->
+                                <div class="col-md-4"><label for="status" class="form-label">สถานะหนังสือ</label><select id="status" name="status" class="form-select"><option selected>แจ้งผู้เกี่ยวข้อง</option><option>กำลังดำเนินการ</option><option>เสร็จสิ้น</option></select></div>
+                                <!-- ========== END: MODIFICATION ========== -->
+								
+								<!-- ========== START: USER REQUEST 1 - Add Admin Officer ID ========== -->
+                                <div class="col-md-4">
+                                    <label for="adminOfficerId" class="form-label">รหัสเจ้าหน้าที่ธุรการ</label>
+                                    <input type="password" class="form-control" id="adminOfficerId" name="adminOfficerId" placeholder="กรอกรหัสเพื่อยืนยัน" required>
+                                    <div class="invalid-feedback">กรุณากรอกรหัสเจ้าหน้าที่ธุรการ</div>
+                                </div>
+                                <!-- ========== END: USER REQUEST 1 ========== -->
+								
+								
+                            </div>
+                        </div>
+                        <div class="d-grid mt-4"><button class="btn btn-primary btn-lg" type="submit"><i class="fas fa-save me-2"></i>บันทึกข้อมูล</button></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-1.13.8/b-2.4.2/b-html5-2.4.2/b-print-2.4.2/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/locales/bootstrap-datepicker.th.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    
+    <!-- ========== START: MODIFICATION - Moved SignaturePad script load ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+    <!-- ========== END: MODIFICATION ========== -->
+
+    <!-- ========== START: MODIFICATION 1 - ADD CHART.JS LIBRARIES ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- ========== END: MODIFICATION 1 ========== -->
+
+    <!-- 1. Loading Overlay Script -->
+    <!-- ========== START: MODIFICATION - REMOVING BROKEN CODE BLOCK ========== -->
+    <!-- The erroneous JavaScript block that was here has been deleted. -->
+    <!-- ========== END: MODIFICATION ========== -->
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+
+    <!-- ========== START: MODIFICATION - RESTORED ENTIRE SCRIPT BLOCK ========== -->
+    <script>
+        // --- CONFIGURATION ---
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbydtH_gNzk7h6m-vjKvsqKMUmMacc-IBgjUbFVYNCgSIB7uILRWbICV3Q7JRdvVuGO0IQ/exec';
+        const GEMINI_API_KEY = 'AIzaSyD3rvRoKKozLjYcGrtgnMYWQV2SwjnX1m4'; // ‼️ กรุณาใส่ API Key ของคุณ
+        pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js`;
+
+        // ========== START: MODIFICATION 3 - REGISTER CHART.JS PLUGIN ==========
+        Chart.register(ChartDataLabels);
+        // ========== END: MODIFICATION 3 ==========
+
+
+        // --- STYLES & HELPERS ---
+        // 2. Updated styles (removed text-dark)
+        // ========== START: MODIFICATION - Update Priority Styles Map ==========
+        const priorityStyles = { 
+            'ปกติ': 'bg-info',     // ฟ้า
+            'ด่วน': 'bg-warning',  // เหลือง
+            'ด่วนมาก': 'bg-budget',   // ส้ม (ใช้ bg-budget)
+            'ด่วนที่สุด': 'bg-danger'   // แดง
+        };
+        // ========== END: MODIFICATION ==========
+        const statusStyles = { 'เสนอ ผอ.': 'bg-secondary', 'แจ้งผู้เกี่ยวข้อง': 'bg-info', 'กำลังดำเนินการ': 'bg-warning', 'เสร็จสิ้น': 'bg-success', 'รอตอบรับ': 'bg-primary' };
+        // ========== START: MODIFICATION 1 - Add styles for forwardTo ==========
+        const forwardToStyles = {
+            'กลุ่มบริหารวิชาการ': 'bg-academic',
+            'กลุ่มบริหารงบประมาณ': 'bg-budget',
+            'กลุ่มบริหารงานบุคคล': 'bg-personnel',
+            'กลุ่มบริหารทั่วไป': 'bg-general',
+            'กลุ่มงานการจัดการศึกษา': 'bg-academic', // Added
+            'กลุ่มงานพัฒนาโครงการพิเศษ': 'bg-budget', // Added
+            'กลุ่มงานอำนวยการ': 'bg-general', // Added
+            'กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์': 'bg-budget', // Added
+            'กลุ่มงานบุคลากร': 'bg-personnel', // Added
+            'กลุ่มงานชุมชนและภาคีเครือข่าย': 'bg-general', // Added
+            'กลุ่มงานกิจการนักเรียน': 'bg-academic', // Added
+            'กลุ่มงานอาคารสถานที่และสภาพแวดล้อม': 'bg-general' // Added
+        };
+         // ========== END: MODIFICATION 1 ==========
+        
+        // ========== START: MODIFICATION - Add Chart Group Name Aliases ==========
+        const groupNameAliases = {
+            'กลุ่มงานการจัดการศึกษา': 'การจัดการศึกษา',
+            'กลุ่มงานพัฒนาโครงการพิเศษ': 'โครงการพิเศษ',
+            'กลุ่มงานอำนวยการ': 'อำนวยการ',
+            'กลุ่มงานแผนงาน การเงิน พัสดุ และสินทรัพย์': 'แผนงาน การเงินฯ',
+            'กลุ่มงานบุคลากร': 'บุคลากร',
+            'กลุ่มงานชุมชนและภาคีเครือข่าย': 'ชุมชน/ภาคีเครือข่าย',
+            'กลุ่มงานกิจการนักเรียน': 'กิจการนักเรียน',
+            'กลุ่มงานอาคารสถานที่และสภาพแวดล้อม': 'อาคารสถานที่ฯ'
+        };
+        // ========== END: MODIFICATION ==========
+        
+        // ========== START: MODIFICATION - Revert date format output ==========
+        // Reverted: Added space back after month
+        const formatDateThaiFromDateObj = date => `${date.getDate()} ${["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."][date.getMonth()]} ${date.getFullYear() + 543}`; 
+        // ========== END: MODIFICATION ==========
+        const thaiMonths = { "ม.ค.": 0, "ก.พ.": 1, "มี.ค.": 2, "เม.ย.": 3, "พ.ค.": 4, "มิ.ย.": 5, "ก.ค.": 6, "ส.ค.": 7, "ก.ย.": 8, "ต.ค.": 9, "พ.ย.": 10, "ธ.ค.": 11 };
+
+        function parseThaiDate(dateStr) {
+            if (!dateStr) return null;
+            // Handle both "1 ต.ค. 2568" and "1 ต.ค.2568"
+            const parts = dateStr.replace(/(\d+)\s*([ก-ฮ]+\.[ค]\.)\s*(\d+)/, '$1 $2 $3').split(' ');
+            if (parts.length !== 3) return null;
+            const day = parseInt(parts[0]);
+            const month = thaiMonths[parts[1]];
+            const year = parseInt(parts[2]) - 543;
+            if (isNaN(day) || month === undefined || isNaN(year)) return null;
+            return new Date(year, month, day);
+        }
+
+        function convertThaiToArabicNumerals(thaiString) {
+            if (typeof thaiString !== 'string') return thaiString;
+            const numeralMap = { '๑': '1', '๒': '2', '๓': '3', '๔': '4', '๕': '5', '๖': '6', '๗': '7', '๘': '8', '๙': '9', '๐': '0' };
+            let result = '';
+            for (let i = 0; i < thaiString.length; i++) {
+                const char = thaiString[i];
+                result += numeralMap[char] || char;
+            }
+            return result;
+        }
+
+        // --- GLOBAL VARIABLES ---
+        let docTable, notifyTable, allServerData = [];
+		// ========== START: MODIFICATION (Req 1, 2, 3) ==========
+        let allUsersData = []; // เก็บข้อมูลผู้ใช้ทั้งหมด
+        let tomSelectReceiver = null; // TomSelect instance สำหรับ ผู้รับ
+        let tomSelectDeputyAssign = null; // TomSelect instance สำหรับ รองฯ มอบหมาย
+        // ========== END: MODIFICATION ==========
+        let statusModal, editCommentModal, viewCommentModal, aiVerificationModal, aiPdfSummaryModal, registerModal;
+        // ========== START: MODIFICATION - Add isPreloadedSignature flag ==========
+        // let signaturePad, notifyForwardToFilter, isPreloadedSignature = false; // [MODIFICATION] Remove notifyForwardToFilter
+        let signaturePad, isPreloadedSignature = false;
+        // ========== END: MODIFICATION ==========
+        let tempAiData = {};
+        let currentPdfFile = null;
+
+        // ========== START: MODIFICATION - ADD CHART INSTANCE VARIABLES ==========
+        let groupChartInstance = null; 
+        let statusDoughnutInstance = null;
+        // ========== END: MODIFICATION ==========
+
+
+        $(document).ready(function() {
+		
+			// ========== START: MODIFICATION (Req 2 & 3) - Initialize TomSelects (placeholder) ==========
+            // เราจะสร้างจริงหลังจากได้ข้อมูลผู้ใช้
+            tomSelectReceiver = new TomSelect('#receiver', { placeholder: 'กำลังโหลด...' });
+            tomSelectDeputyAssign = new TomSelect('#deputyAssign', { placeholder: 'กำลังโหลด...' });
+            // ========== END: MODIFICATION ==========
+		
+            // 1. Setup LoadingOverlay
+            $.LoadingOverlaySetup({
+                background: "rgba(0, 0, 0, 0.6)",
+                image: "https://media1.giphy.com/media/mBMdeZHp6bqfkL4vBI/giphy.gif",
+                imageAnimation: "none",
+                size: 150
+            });
+
+            // 4. Initialize Bootstrap Tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+              return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+
+            statusModal = new bootstrap.Modal('#statusModal');
+            editCommentModal = new bootstrap.Modal('#editCommentModal');
+            viewCommentModal = new bootstrap.Modal('#viewCommentModal');
+            aiVerificationModal = new bootstrap.Modal('#aiVerificationModal');
+            aiPdfSummaryModal = new bootstrap.Modal('#aiPdfSummaryModal');
+            // 2. Initialize new modal
+            registerModal = new bootstrap.Modal('#registerModal');
+
+
+             // ========== START: MODIFICATION - Add shown.bs.modal listener for aiVerificationModal ==========
+            // เพิ่ม event listener ถาวรให้โมดอล
+            // เมื่อโมดอลนี้ "แสดงเสร็จ" (shown.bs.modal)
+            const aiVerifyModalEl = document.getElementById('aiVerificationModal');
+            if (aiVerifyModalEl) {
+                aiVerifyModalEl.addEventListener('shown.bs.modal', () => {
+                    // ให้สั่งซ่อน LoadingOverlay (true = ซ่อนทุกอันที่อาจจะค้างอยู่)
+                    $.LoadingOverlay("hide", true); 
+                });
+            } else {
+                console.error("Could not find aiVerificationModal element.");
+            }
+            // ========== END: MODIFICATION ==========
+
+
+
+            // ========== START: MODIFICATION - Initialize SignaturePad on ready ==========
+            // Moved initialization logic to 'shown.bs.modal' event
+            /*
+            const signatureCanvas = document.getElementById('signature-pad');
+            if (signatureCanvas) {
+                signaturePad = new SignaturePad(signatureCanvas, { backgroundColor: 'rgb(255, 255, 255)' });
+
+                // Function to resize canvas for high DPI and responsiveness
+                function resizeCanvas() {
+                    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                    signatureCanvas.width = signatureCanvas.offsetWidth * ratio;
+                    signatureCanvas.height = signatureCanvas.offsetHeight * ratio;
+                    signatureCanvas.getContext("2d").scale(ratio, ratio);
+                    signaturePad.clear(); // Clear after resize
+                }
+
+                // Initial resize
+                window.addEventListener("resize", resizeCanvas); // Resize on window resize
+                resizeCanvas(); // Initial resize call
+
+                // Setup clear button
+                 $('#clear-signature').on('click', function() {
+                    if(signaturePad) {
+                        signaturePad.clear();
+                    }
+                 });
+
+            } else {
+                console.error("Signature pad canvas not found!");
+            }
+            */
+             // Setup clear button (moved here, outside conditional initialization)
+             // ========== START: MODIFICATION - Reset signature flag on clear ==========
+             $('#clear-signature').on('click', function() {
+                if(signaturePad) { // Check if signaturePad exists before clearing
+                    signaturePad.clear();
+                    isPreloadedSignature = false; // Reset flag
+                }
+             });
+             // ========== END: MODIFICATION ==========
+            // ========== END: MODIFICATION ==========
+
+
+            const forwardToSelect = new TomSelect('#forwardTo',{ create: false, sortField: { field: "text", direction: "asc" } });
+
+            $('#dateReceived').val(formatDateThaiFromDateObj(new Date()));
+            $('#dueDate, #expectedDate').datepicker({ format: 'd M yyyy', language: 'th', autoclose: true, todayHighlight: true, orientation: 'bottom', thaiyear: true });
+            
+            // ========== START: MODIFICATION - Add change listener for priority select color ==========
+            $('#priority').on('change', function() {
+                $(this).css('color', 'black'); // Reset
+                const val = $(this).val();
+                if (val === 'ปกติ') {
+                    $(this).css('color', 'blue');
+                } else if (val === 'ด่วน' || val === 'ด่วนมาก' || val === 'ด่วนที่สุด') {
+                    $(this).css('color', 'red');
+                }
+            }).trigger('change'); // Trigger on load to set initial color
+            // ========== END: MODIFICATION ==========
+
+
+            initializeCanvasSignaturePad();
+            initializeDataTables();
+            setupFileUpload();
+            setupEventListeners(forwardToSelect);
+
+            setTimeout(() => {
+                //$('#loading-progress-container').fadeOut(500, loadInitialData);
+				// ========== START: USER REQUEST 4 - Show overlay before loading data ==========
+                $('#loading-progress-container').fadeOut(500, () => {
+                    // แสดง LoadingOverlay ทันทีที่ progress bar หายไป
+                    $.LoadingOverlay("show", { text: "" });
+                    // จากนั้นจึงเริ่มโหลดข้อมูล
+                    loadInitialData();
+                });
+                // ========== END: USER REQUEST 4 ==========
+            }, 500);
+
+            $('button[data-bs-toggle="pill"]').on('shown.bs.tab', () => {
+                $($.fn.dataTable.tables(true)).DataTable().columns.adjust().responsive.recalc();
+                
+                // ========== START: MODIFICATION - Redraw charts on tab change ==========
+                // หน่วงเวลาเล็กน้อยเพื่อให้แน่ใจว่า Canvas มองเห็นได้
+                setTimeout(() => {
+                    if (groupChartInstance) groupChartInstance.resize();
+                    if (statusDoughnutInstance) statusDoughnutInstance.resize();
+                }, 50);
+                // ========== END: MODIFICATION ==========
+            });
+
+            generateReceiptNumber();
+        });
+        
+        // 6 & 7. Custom sorting for Thai Date (d M yyyy)
+        jQuery.fn.dataTable.ext.type.order['thai-date-pre'] = function ( d ) {
+            var date = parseThaiDate(d);
+            return date ? date.getTime() : 0;
+        };
+
+        // ========== START: MODIFICATION 3.1 - Add custom sorter for Receipt Number (e.g., "100/2567") ==========
+        jQuery.fn.dataTable.ext.type.order['receipt-number-sort-pre'] = function ( d ) {
+            if (!d || typeof d !== 'string' || d.indexOf('/') === -1) return 0;
+            const parts = d.split('/');
+            const num = parseInt(parts[0]) || 0;
+            const year = parseInt(parts[1]) || 0;
+            // Combine into a single sortable number (Year DESC, Num DESC)
+            return (year * 100000) + num; 
+        };
+        // ========== END: MODIFICATION 3.1 ==========
+
+
+        // --- DATA & CORE FUNCTIONS ---
+        function loadInitialData() {
+            fetch(WEB_APP_URL)
+                .then(res => res.json())
+                .then(res => {
+                    if (!res.success) throw new Error(res.message);
+					
+                    // ========== START: MODIFICATION (Req 1) - Store data and users ==========
+                    allServerData = res.data || [];
+                    allUsersData = res.users || []; // <-- บันทึกข้อมูลผู้ใช้
+                    
+                    if(docTable) docTable.clear().rows.add(allServerData).draw();
+                    if(notifyTable) notifyTable.clear().rows.add(allServerData).draw();
+                    
+                    populateUserSelects(allUsersData); // <-- เรียกฟังก์ชันใหม่
+                    // ========== END: MODIFICATION ==========
+					
+                    updateFilterOptions(allServerData);
+                    generateReceiptNumber();
+					
+					// ========== START: USER REQUEST 4 - Hide overlay after data load ==========
+                    // ซ่อน LoadingOverlay หลังจากที่ข้อมูลโหลดและวาดตารางเสร็จ
+                    $.LoadingOverlay("hide");
+                    // ========== END: USER REQUEST 4 ==========
+					
+					
+                }).catch(err => showError(err.message));
+        }
+
+        // ========== START: MODIFICATION (Req 2 & 3) - New Function ==========
+        /**
+         * ‼️ เพิ่มใหม่: สร้าง/อัปเดต Dropdown ของ TomSelect ด้วยข้อมูลผู้ใช้
+         */
+        function populateUserSelects(users) {
+            try {
+                // เตรียมรายการผู้ใช้
+                const allUserNames = users.map(u => ({ value: u.name, text: u.name }));
+                const officerUsers = users
+                    .filter(u => u.role === 'Officer')
+                    .map(u => ({ value: u.name, text: u.name }));
+
+                // (Req 3) อัปเดต TomSelect สำหรับ 'receiver' (ผู้รับ)
+                if (tomSelectReceiver) tomSelectReceiver.destroy();
+                tomSelectReceiver = new TomSelect('#receiver', {
+                    create: false, // ต้องเลือกจาก Officer ที่มีอยู่
+                    options: officerUsers,
+                    placeholder: 'ค้นหาผู้รับ (Officer)...',
+                    // 'required' attribute บน <select> จะทำงานร่วมกับ <form> validation
+                });
+
+                // (Req 2) อัปเดต TomSelect สำหรับ 'deputyAssign' (รองฯ มอบหมาย)
+                if (tomSelectDeputyAssign) tomSelectDeputyAssign.destroy();
+                tomSelectDeputyAssign = new TomSelect('#deputyAssign', {
+                    create: false, // ต้องเลือกจากรายชื่อทั้งหมด
+                    options: allUserNames,
+                    placeholder: 'ค้นหาผู้รับผิดชอบ...'
+                });
+
+                // (Req 2) เชื่อมโยง 'deputyAssign' กับ 'responsiblePerson'
+                tomSelectDeputyAssign.on('change', function(value) {
+                    $('#responsiblePerson').val(value || ''); // อัปเดตช่องผู้รับผิดชอบ (แท็บ 3)
+                });
+
+            } catch (e) {
+                console.error("Error populating user selects:", e);
+                showError("เกิดข้อผิดพลาดในการโหลดรายชื่อผู้ใช้");
+            }
+        }
+        // ========== END: MODIFICATION ==========
+
+
+
+        function generateReceiptNumber() {
+            const currentYearBE = new Date().getFullYear() + 543;
+            const yearSuffix = `/${currentYearBE}`;
+
+            const receiptsThisYear = allServerData
+                .map(d => d.receiptNumber)
+                .filter(rn => rn && rn.endsWith(yearSuffix));
+
+            let maxNum = 0;
+            if (receiptsThisYear.length > 0) {
+                maxNum = Math.max(...receiptsThisYear.map(rn => {
+                    const numPart = rn.split('/')[0];
+                    return parseInt(numPart) || 0;
+                }));
+            }
+
+            const nextNum = maxNum + 1;
+            $('#receiptNumber').val(`${nextNum}${yearSuffix}`);
+        }
+
+        function initializeDataTables() {
+            const commonSettings = {
+                responsive: true,
+                dom: '<"row align-items-center"<"col-sm-12 col-md-6"l><"col-sm-12 col-md-6 text-md-end"B>>' +
+                    '<"row"<"col-sm-12"tr>>' +
+                    '<"row"<"col-sm-12 col-md-5"i><"col-sm-12 col-md-7"p>>',
+                buttons: [
+                    { extend: 'excel', text: '<i class="fas fa-file-excel"></i> Excel', className: 'btn btn-success btn-sm' },
+                    { extend: 'copy', text: '<i class="fas fa-copy"></i> คัดลอก', className: 'btn btn-secondary btn-sm' },
+                    { extend: 'print', text: '<i class="fas fa-print"></i> สั่งพิมพ์', className: 'btn btn-danger btn-sm' }
+                ],
+                language: { url: "https://cdn.datatables.net/plug-ins/2.0.8/i18n/th.json" },
+                // ordering: false, // Removed
+                pageLength: 10,
+            };
+
+            docTable = $('#docTable').DataTable({
+                ...commonSettings,
+                ordering: true, // 6. Enable ordering
+                order: [[4, 'desc']], // 6. Sort by dateReceived (index 4) descending
+                // ========== START: MODIFICATION - Add column widths for docTable ==========
+                columnDefs: [
+                    { width: '10%', type: 'thai-date', targets: 4 }, // วันที่รับ (Apply Thai date sorting)
+                    { width: '14%', targets: 0 },      // ที่
+                    { width: '12%', "whiteSpace": "nowrap", targets: 3 } // ความสำคัญ (Fit header)
+                ],
+                // ========== END: MODIFICATION ==========
+                // ========== START: MODIFICATION 4 & 5 - Update docTable columns ==========
+                columns: [
+                    { data: 'number', title: 'ที่' }, // index 0
+                    { // index 1: เรื่อง (Modified)
+                        data: 'title', 
+                        title: 'เรื่อง',
+                        render: function(data, type, row) {
+                            // ถ้ามีไฟล์แนบ (row.fileName) ให้สร้างเป็นลิงก์
+                            if (row.fileName) {
+                                return `<a href="${row.fileName}" target="_blank" title="เปิดไฟล์แนบ">${data}</a>`;
+                            }
+                            // ถ้าไม่มีไฟล์ ให้แสดงชื่อเรื่องปกติ
+                            return data;
+                        }
+                    },
+                    { data: 'category', title: 'ประเภทหนังสือ', visible: false }, // index 2
+                    { // index 3: ความสำคัญ
+                        data: 'priority', title: 'ความสำคัญ',
+                        // 2. Updated Priority render
+                        render: function(data) {
+                            const style = priorityStyles[data] || 'bg-secondary';
+                            return `<div class="progress" style="height: 20px; font-size: 0.85rem;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated ${style}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${data}</div>
+                                    </div>`;
+                        }
+                    },
+                    { data: 'dateReceived', title: 'วันที่รับ' }, // index 4
+                    { data: 'forwardTo', title: 'กลุ่ม/งาน', visible: false }, // index 5 (Hide column)
+                    { // index 6: สถานะ
+                        data: 'status', title: 'สถานะ', visible: false, // (Hide column)
+                        // 2. Updated Status render
+                        render: function(data) {
+                            const style = statusStyles[data] || 'bg-secondary';
+                            return `<div class="progress" style="height: 20px; font-size: 0.85rem;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated ${style}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${data}</div>
+                                    </div>`;
+                        }
+                    }
+                    // Column 7 (fileName) was here and has been removed.
+                ]
+                // ========== END: MODIFICATION 4 & 5 ==========
+            });
+
+            // --- START: MODIFICATION (Req 3) ---
+            docTable.on('draw.dt', function () {
+                const filteredData = docTable.rows({ filter: 'applied' }).data().toArray();
+                updateListDashboard(filteredData);
+            });
+            // --- END: MODIFICATION ---
+
+            // ========== START: MODIFICATION 2 - Changed notifyTable columns and columnDefs ==========
+            notifyTable = $('#notifyTable').DataTable({
+                ...commonSettings,
+                ordering: true, 
+                // ========== START: MODIFICATION 3.2 - Set default sort for notifyTable ==========
+                order: [[0, 'desc']], // Sort by รับที่ (index 0) descending
+                 columnDefs: [
+                    { width: '5%', targets: 0, type: 'receipt-number-sort' }, // รับที่ (Added sort type)
+                    { width: '10%', targets: 1, type: 'thai-date' }, // วันที่รับ
+                // ========== END: MODIFICATION 3.2 ==========
+                    { width: '35%', targets: 2 }, // เรื่อง
+                    { width: '10%', targets: 3 }, // ความสำคัญ
+                    // ========== START: MODIFICATION 3 - Update filter column indexes ==========
+                    { width: '10%', targets: 4, className: 'text-center', orderable: false }, // ความเห็น ผอ.
+                    { width: '15%', targets: 5 }, // มอบหมาย
+                    { width: '10%', targets: 6 }  // สถานะ
+                ],
+                // ========== START: MODIFICATION 1 - Changed columns to match new order ==========
+                columns: [
+                    { data: 'receiptNumber', title: 'รับที่' }, // index 0
+                    { data: 'dateReceived', title: 'วันที่รับ' }, // index 1
+                    { // index 2 - เรื่อง (with link)
+                        data: 'title', 
+                        title: 'เรื่อง',
+                        render: function(data, type, row) {
+                            return row.fileName ? `<a href="${row.fileName}" target="_blank" title="เปิดไฟล์แนบ">${data}</a>` : data;
+                        }
+                    },
+                    { // index 3 - ความสำคัญ
+                        data: 'priority', title: 'ความสำคัญ',
+                        render: function(data) {
+                            const style = priorityStyles[data] || 'bg-secondary';
+                            return `<div class="progress" style="height: 20px; font-size: 0.85rem;">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated ${style}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${data}</div>
+                                    </div>`;
+                        }
+                    },
+                    { // index 4 - ความเห็น ผอ.
+                        data: null, title: 'ความเห็น ผอ.',
+                        render: (data, type, row) => row.directorCommentDate ?
+                            `<button class="btn btn-sm btn-primary btn-view-comment"><i class="fas fa-eye me-0"></i></button>` :
+                            `<button class="btn btn-sm btn-danger btn-add-comment"><i class="fas fa-plus me-0"></i></button>`
+                    },
+                    // ========== START: MODIFICATION 1 - Style 'มอบหมาย' column and add responsible person ==========
+                    { // index 5 - มอบหมาย
+                        data: 'forwardTo', 
+                        title: 'มอบหมาย',
+                        render: function(data, type, row) {
+                            const groupName = data || '-';
+                            // ========== START: MODIFICATION - Show deputyAssign OR responsiblePerson ==========
+                            const responsiblePerson = row.responsiblePerson || row.deputyAssign || ''; // Get responsible person
+                            // ========== END: MODIFICATION ==========
+                            const style = forwardToStyles[data] || 'bg-secondary'; // Use new styles map
+                            
+                            // ========== START: MODIFICATION - Center align and remove <br> ==========
+                            // Base HTML with progress bar for the group, wrapped in a centering div
+                            let html = `<div style="text-align: center;">
+                                            <div class="progress" style="height: 20px; font-size: 0.85rem; margin-bottom: 2px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated ${style}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${groupName}</div>
+                                            </div>`;
+                                        
+                            // Append responsible person if exists (without <br>)
+                            if (responsiblePerson) {
+                                html += `<span class="text-danger small">${responsiblePerson}</span>`; 
+                            }
+
+                            html += `</div>`; // Close the centering div
+                            return html;
+                        }
+                    },
+                    // ========== END: MODIFICATION 1 ==========
+                    // ========== START: MODIFICATION - Add date display below status bar ==========
+                    { // index 6 - สถานะ
+                        data: 'status', 
+                        title: 'สถานะ',
+                        render: function(data, type, row) {
+                            let currentStatus = data;
+                            // Determine the effective status (handle 'เสนอ ผอ.' logic)
+                            if (!row.directorCommentDate && (data === 'แจ้งผู้เกี่ยวข้อง' || data === 'รอตอบรับ')) {
+                                currentStatus = 'เสนอ ผอ.';
+                            }
+                            const style = statusStyles[currentStatus] || 'bg-secondary';
+
+                            // Determine the relevant date based on the status
+                            let relevantDate = '';
+                            // ========== START: MODIFICATION - Format dueDate if status is 'กำลังดำเนินการ' ==========
+                            if (currentStatus === 'เสร็จสิ้น') {
+                                // Prefer completionDate if backend provides it
+                                relevantDate = row.completionDate || row.dateReceived || ''; 
+                            } else if (currentStatus === 'เสนอ ผอ.' || currentStatus === 'แจ้งผู้เกี่ยวข้อง') { 
+                                relevantDate = row.dateReceived || ''; 
+                            } else if (currentStatus === 'กำลังดำเนินการ') {
+                                // Attempt to parse and format the dueDate
+                                const dueDateStr = row.dueDate || '';
+                                if (dueDateStr) {
+                                    const parsedDate = parseThaiDate(dueDateStr); // Assumes dueDate is like "24 ต.ค. 2568"
+                                    if (parsedDate) {
+                                         // Format like "1 ต.ค.2568" is not standard, using "1 ต.ค. 2568"
+                                        relevantDate = formatDateThaiFromDateObj(parsedDate); 
+                                    } else {
+                                        relevantDate = dueDateStr; // Fallback if parsing fails
+                                    }
+                                } else {
+                                     relevantDate = ''; // No due date provided
+                                }
+                            } 
+                            // ========== END: MODIFICATION ==========
+
+                            // Build HTML
+                            let html = `<div style="text-align: center;">
+                                            <div class="status-progress-bar-wrapper progress" title="คลิกเพื่อเปลี่ยนสถานะ" style="height: 20px; font-size: 0.85rem; cursor: pointer; margin-bottom: 2px;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated ${style}" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">${currentStatus}</div>
+                                            </div>`;
+
+                            // Append the relevant date if it exists
+                            if (relevantDate) {
+                                html += `<span class="text-danger small">${relevantDate}</span>`;
+                            }
+                            
+                            html += `</div>`; // Close the centering div
+                            return html;
+                        }
+                    }
+                    // ========== END: MODIFICATION ==========
+                ]
+                // ========== END: MODIFICATION 1 ==========
+            });
+            // ========== END: MODIFICATION 2 ==========
+
+            // --- START: MODIFICATION (Req 3) ---
+            notifyTable.on('draw.dt', function () {
+                const filteredData = notifyTable.rows({ filter: 'applied' }).data().toArray();
+                updateNotifyDashboard(filteredData);
+            });
+            // --- END: MODIFICATION ---
+
+            setupFilterListeners();
+        }
+
+        function initializeCanvasSignaturePad() {
+            // ========== START: MODIFICATION - Initialize and Resize on Modal Show ==========
+            const modalElement = document.getElementById('editCommentModal');
+            const signatureCanvas = document.getElementById('signature-pad');
+
+            if (modalElement && signatureCanvas) {
+                modalElement.addEventListener('shown.bs.modal', function () {
+                    // Initialize SignaturePad if it doesn't exist yet
+                    if (!signaturePad) {
+                         signaturePad = new SignaturePad(signatureCanvas, { backgroundColor: 'rgb(255, 255, 255)' });
+                    }
+
+                    // ========== START: MODIFICATION - Correct canvas sizing ==========
+                    // Set canvas attribute size to match its CSS display size
+                    try {
+                         // Make sure the canvas element is visible and has dimensions
+                        if (signatureCanvas.offsetWidth > 0 && signatureCanvas.offsetHeight > 0) {
+                            // Set the canvas drawing buffer size to match its displayed size
+                            signatureCanvas.width = signatureCanvas.offsetWidth;
+                            signatureCanvas.height = signatureCanvas.offsetHeight;
+                            
+                            // Clear the pad after resizing (library handles scaling internally now)
+                            signaturePad.clear(); 
+                        } else {
+                            console.warn("Signature canvas has zero dimensions, skipping resize.");
+                            if (signaturePad) {
+                                signaturePad.clear();
+                            }
+                        }
+                    } catch (e) {
+                         console.error("Error resizing signature pad:", e);
+                         if (signaturePad) {
+                            signaturePad.clear();
+                        }
+                    }
+                    // ========== END: MODIFICATION ==========
+
+                    /* // Remove manual scaling logic
+                    try {
+                        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                        // Make sure the canvas element is visible and has dimensions
+                        if (signatureCanvas.offsetWidth > 0 && signatureCanvas.offsetHeight > 0) {
+                            signatureCanvas.width = signatureCanvas.offsetWidth * ratio;
+                            signatureCanvas.height = signatureCanvas.offsetHeight * ratio;
+                            const context = signatureCanvas.getContext("2d");
+                             if (context) {
+                                context.scale(ratio, ratio);
+                                signaturePad.clear(); // Clear after resizing
+                            } else {
+                                console.error("Could not get 2D context for signature pad.");
+                            }
+                        } else {
+                            console.warn("Signature canvas has zero dimensions, skipping resize.");
+                            // Attempt to clear anyway, in case it was initialized previously
+                            if (signaturePad) {
+                                signaturePad.clear();
+                            }
+                        }
+                    } catch (e) {
+                         console.error("Error resizing signature pad:", e);
+                         // Attempt to clear
+                         if (signaturePad) {
+                            signaturePad.clear();
+                        }
+                    }
+                    */
+                });
+            } else {
+                console.error("Could not find modal or signature canvas elements for event listener setup.");
+            }
+            // ========== END: MODIFICATION ==========
+
+
+             // ========== START: MODIFICATION - Moved clear button setup to ready ==========
+             /* $('#clear-signature').on('click', function() {
+                if(signaturePad) {
+                    signaturePad.clear();
+                }
+             });
+             */
+             // ========== END: MODIFICATION ==========
+        }
+
+        function setupFilterListeners() {
+            // ========== START: MODIFICATION - Replaced HTML comments with JS comments ==========
+            // Fix Priority Filter Regex
+            $('#titleSearch').on('keyup', function () { docTable.column(1).search(this.value).draw(); });
+            $('#priorityFilter').on('change', function () { 
+                const val = $(this).val().trim(); // Trim whitespace from dropdown value
+                // Use regex that allows for surrounding whitespace in the data
+                docTable.column(3).search(val ? `^\\s*${val}\\s*$` : '', true, false).draw(); 
+            });
+            // Fix Priority Filter Regex
+            // ========== END: MODIFICATION ==========
+            // 5. Removed statusFilter listener
+            // $('#statusFilter').on('change', function () { docTable.column(6).search($(this).val() ? `^${$(this).val()}$` : '', true, false).draw(); });
+            
+            // ========== START: MODIFICATION 2.2 - Add listener for docYearFilter ==========
+            $('#docYearFilter').on('change', function () {
+                docTable.column(4).search(this.value, false, false).draw(); // Search column 4 (dateReceived)
+            });
+            // ========== END: MODIFICATION 2.2 ==========
+
+             $('#docListResetFilters').on('click', function() {
+                $('#titleSearch').val('');
+                $('#priorityFilter').val('');
+                $('#docYearFilter').val(''); // MODIFIED 2.3 - Reset year filter
+                // 5. Removed statusFilter reset
+                // $('#statusFilter').val('');
+                docTable.columns().search('').draw();
+            });
+
+            // notifyForwardToFilter = new TomSelect('#notifyForwardToFilter',{ placeholder: 'ค้นหาผู้รับ...' }); // <-- [MODIFICATION] Removed TomSelect
+            
+
+            $('#notifyReceiptSearch').on('keyup', function () {
+                 const searchTerm = this.value;
+                notifyTable.columns([0, 2]).search(searchTerm, true, false).draw();
+            });
+
+            $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                if (settings.nTable.id !== 'notifyTable') return true;
+
+                const dateFilter = $('#notifyDateSearch').val();
+                if (dateFilter !== 'all') {
+                    const dateColumn = parseThaiDate(data[1] || '');
+                    if (!dateColumn) return false;
+                    const today = new Date(); today.setHours(0, 0, 0, 0);
+                    if (dateFilter === 'today' && dateColumn.getTime() !== today.getTime()) return false;
+                    if (dateFilter === '7days') {
+                        const last7Days = new Date(today); last7Days.setDate(today.getDate() - 6);
+                        if (dateColumn < last7Days || dateColumn > today) return false;
+                    }
+                    if (dateFilter === 'thismonth' && (dateColumn.getMonth() !== today.getMonth() || dateColumn.getFullYear() !== today.getFullYear())) return false;
+                    if (dateFilter === 'thisyear' && dateColumn.getFullYear() !== today.getFullYear()) return false;
+                }
+
+                const statusFilter = $('#notifyStatusFilter').val();
+                if (statusFilter) {
+                    const rowData = notifyTable.row(dataIndex).data();
+                    let currentStatus = rowData.status;
+                    if (!rowData.directorCommentDate && (currentStatus === 'แจ้งผู้เกี่ยวข้อง' || currentStatus === 'รอตอบรับ')) {
+                        currentStatus = 'เสนอ ผอ.';
+                    }
+                    if (currentStatus !== statusFilter) return false;
+                }
+
+                // ========== START: MODIFICATION 1.2 - Add Year Filter logic (notifyTable) ==========
+                const yearFilter = $('#notifyYearFilter').val();
+                if (yearFilter) {
+                    const receiptNumber = data[0] || ''; // 'receiptNumber' is column 0
+                    const year = receiptNumber.split('/')[1];
+                    if (year !== yearFilter) return false;
+                }
+                // ========== END: MODIFICATION 1.2 ==========
+
+
+                // ========== START: MODIFICATION - Use Static List for notifyForwardToFilter ==========
+                // ย้ายตรรกะการกรอง 'ผู้รับ' มาไว้ที่นี่ เพื่อให้เราสามารถ 'ทำความสะอาด' ข้อมูลจากตารางก่อนเปรียบเทียบ
+                
+                // [MODIFICATION] Read value from standard select
+                const selectedForwardTo = $('#notifyForwardToFilter').val(); 
+                
+                if (selectedForwardTo) { // Check if a value is selected
+                    // ค่าที่เลือก (จาก static list ของเรา) สะอาดอยู่แล้ว
+                    // const cleanSelectedValue = selectedForwardTo.trim().replace(/\p{C}/gu, ''); // Clean selected value
+                    const cleanSelectedValue = selectedForwardTo.trim(); // Static list is already clean
+                    
+                    // [THE FIX] Get the raw data from the row object, not the rendered HTML (data[5])
+                    const rowData = notifyTable.row(dataIndex).data();
+                    const rawForwardTo = rowData.forwardTo || ''; // Get the raw data
+                    
+                    // ทำความสะอาดข้อมูลจากตาราง (เผื่อมีขยะ)
+                    // const cleanTableData = (data[5] || '').replace(/<[^>]+>/g, '').trim().replace(/\p{C}/gu, ''); // Clean table data
+                    const cleanTableData = rawForwardTo.trim(); // Clean the raw data
+                    
+                    // เปรียบเทียบค่าที่สะอาดทั้งคู่
+                    if (cleanSelectedValue !== cleanTableData) {
+                        return false; // ถ้าไม่ตรง ให้ซ่อนแถวนี้
+                    }
+                }
+                // ========== END: MODIFICATION ==========
+
+                return true;
+            });
+
+            // ========== START: MODIFICATION 1.3 - Add trigger for notifyYearFilter ==========
+            // [MODIFICATION] Add standard change listener for the select
+            $('#notifyDateSearch, #notifyStatusFilter, #notifyYearFilter, #notifyForwardToFilter').on('change', () => notifyTable.draw());
+            // ========== END: MODIFICATION 1.3 ==========
+            
+            // ========== START: MODIFICATION - BUG FIX ==========
+            // แก้ไขปัญหาตัวกรอง 'ผู้รับ' (notifyForwardToFilter) และ 'ระดับความสำคัญ' (notifyPriorityFilter)
+            
+            // 1. แก้ไขตัวกรอง 'ผู้รับ' (notifyForwardToFilter)
+            // (ลบ listener ของ TomSelect ออกไปแล้ว และย้ายไปรวมกับด้านบน)
+
+            // 2. แก้ไขตัวกรอง 'ระดับความสำคัญ' (notifyPriorityFilter)
+            $('#notifyPriorityFilter').on('change', function () { 
+                const val = $(this).val().trim(); // Trim whitespace from dropdown value
+                // [THE FIX] Use regex that allows for surrounding whitespace in the data
+                // AND target the correct table (notifyTable)
+                notifyTable.column(3).search(val ? `^\\s*${val}\\s*$` : '', true, false).draw(); 
+            });
+            // ========== END: MODIFICATION - BUG FIX ==========
+
+             $('#notifyResetFilters').on('click', function() {
+                $('#notifyReceiptSearch').val('');
+                $('#notifyDateSearch').val('all');
+                // notifyForwardToFilter.clear(); // <-- [MODIFICATION] Use standard reset
+                $('#notifyForwardToFilter').val(''); // [MODIFICATION] Use standard reset
+                $('#notifyPriorityFilter').val('');
+                $('#notifyStatusFilter').val('');
+                $('#notifyYearFilter').val(''); // MODIFIED 1.4 - Reset year filter
+                notifyTable.search('').columns().search('').draw();
+            });
+
+            // 3. Reload Table Button Listener
+            // REMOVED: $('#reloadNotifyTableBtn').on('click', function() { ... });
+
+            // 4. Open Register Modal Button Listener
+            $('#openRegisterModalBtn').on('click', function() {
+                // Ensure fresh state for registration modal
+                $('#docForm')[0].reset();
+				
+				// ========== START: MODIFICATION (Req 3) - Reset TomSelect ==========
+                if (tomSelectReceiver) tomSelectReceiver.clear();
+                // ========== END: MODIFICATION ==========
+				
+				
+                $('#docForm').removeClass('was-validated'); 
+                generateReceiptNumber(); 
+                $('#dateReceived').val(formatDateThaiFromDateObj(new Date()));
+                $('#status').val('แจ้งผู้เกี่ยวข้อง');
+                
+				<!-- ========== START: USER REQUEST - Reset Admin Officer ID field ========== -->
+                $('#adminOfficerId').val('');
+                $('#adminOfficerId').removeClass('is-invalid');
+                <!-- ========== END: USER REQUEST ========== -->
+				
+				
+				
+                // Clear file state
+                $('#fileUpload').val('');
+                $('#fileNameDisplay').addClass('d-none');
+                $('#pdf-preview-container').addClass('d-none');
+                currentPdfFile = null;
+
+                // Show modal
+                registerModal.show();
+            });
+
+        }
+
+        // ========== START: MODIFICATION - Add Status Colors for Charts ==========
+        // Defined colors for 3 states
+        const chartStatusColors = {
+            'completed': 'rgba(25, 135, 84, 0.8)', // success
+            'inProgress': 'rgba(255, 193, 7, 0.8)', // warning
+            'notify': 'rgba(13, 202, 240, 0.8)'   // info
+        };
+        // ========== END: MODIFICATION ==========
+
+        // --- START: MODIFICATION (Req 3) - Split Dashboard Logic ---
+
+        /**
+         * Updates the 4 summary cards on the "Notify" tab and the 2 charts.
+         * @param {Array} data - The data (usually filtered) to display.
+         */
+        function updateNotifyDashboard(data) {
+            if (!data) data = []; // Handle null/undefined
+
+            // --- 1. คำนวณข้อมูลการ์ดสรุป (Notify Tab) ---
+            try {
+                const total = data.length;
+                const inProgress = data.filter(d => d.status === 'กำลังดำเนินการ').length;
+                const completed = data.filter(d => d.status === 'เสร็จสิ้น').length;
+                const notify = data.filter(d => d.status === 'แจ้งผู้เกี่ยวข้อง').length;
+
+                $('#summary-card-total').text(total.toLocaleString('th-TH'));
+                $('#summary-card-notify').text(notify.toLocaleString('th-TH'));
+                $('#summary-card-inprogress').text(inProgress.toLocaleString('th-TH'));
+                $('#summary-card-completed').text(completed.toLocaleString('th-TH'));
+
+                // --- 2. อัปเดต Doughnut Chart ---
+                updateStatusDoughnut(completed, inProgress, notify);
+
+            } catch (e) {
+                console.error("Error updating notify summary cards:", e);
+            }
+
+            // --- 3. เตรียมข้อมูล Stacked Bar Chart ---
+            try {
+                // นับจำนวน 'forwardTo' โดยแยกตามสถานะ (เฉพาะ 3 สถานะ)
+                const groupData = data.reduce((acc, item) => {
+                    const group = item.forwardTo ? item.forwardTo.trim() : null;
+                    if (!group) return acc; // ไม่นับถ้าไม่มีกลุ่มงาน
+
+                    if (!acc[group]) {
+                        acc[group] = { completed: 0, inProgress: 0, notify: 0 };
+                    }
+
+                    if (item.status === 'เสร็จสิ้น') {
+                        acc[group].completed++;
+                    } else if (item.status === 'กำลังดำเนินการ') {
+                        acc[group].inProgress++;
+                    } else if (item.status === 'แจ้งผู้เกี่ยวข้อง') {
+                        acc[group].notify++;
+                    }
+                    return acc;
+                }, {});
+
+                // เรียงลำดับกลุ่มตามจำนวนรวม (มากไปน้อย)
+                const sortedGroupNames = Object.keys(groupData).sort((a, b) => {
+                    const totalA = groupData[a].completed + groupData[a].inProgress + groupData[a].notify;
+                    const totalB = groupData[b].completed + groupData[b].inProgress + groupData[b].notify;
+                    return totalB - totalA;
+                });
+
+                // ========== START: MODIFICATION - Apply Group Name Aliases ==========
+                const chartLabels = sortedGroupNames.map(name => groupNameAliases[name] || name);
+                // ========== END: MODIFICATION ==========
+                
+                // สร้าง array ข้อมูลสำหรับแต่ละสถานะ
+                const completedData = sortedGroupNames.map(group => groupData[group].completed);
+                const inProgressData = sortedGroupNames.map(group => groupData[group].inProgress);
+                const notifyData = sortedGroupNames.map(group => groupData[group].notify);
+
+                // --- 4. สร้างหรืออัปเดต Stacked Bar Chart ---
+                updateGroupBarChart(chartLabels, completedData, inProgressData, notifyData);
+
+            } catch (e) {
+                console.error("Error creating/updating stacked bar chart:", e);
+            }
+        }
+
+        /**
+         * Updates the 5 summary cards on the "List" tab.
+         * @param {Array} data - The data (usually filtered) to display.
+         */
+        function updateListDashboard(data) {
+            if (!data) data = []; // Handle null/undefined
+
+            // --- 5. คำนวณข้อมูลการ์ด (List Tab) ---
+            try {
+                const now = new Date();
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const yesterday = new Date(today);
+                yesterday.setDate(today.getDate() - 1);
+                const startOfWeek = new Date(today);
+                startOfWeek.setDate(today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1)); // เริ่มวันจันทร์
+                const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+                let total = data.length;
+                let countToday = 0;
+                let countYesterday = 0;
+                let countWeek = 0;
+                let countMonth = 0;
+
+                data.forEach(item => {
+                    const receivedDate = parseThaiDate(item.dateReceived);
+                    if (!receivedDate) return;
+
+                    const itemTime = receivedDate.getTime();
+                    
+                    if (itemTime >= today.getTime()) {
+                        countToday++;
+                    }
+                    if (itemTime >= yesterday.getTime() && itemTime < today.getTime()) {
+                        countYesterday++;
+                    }
+                    if (itemTime >= startOfWeek.getTime()) {
+                        countWeek++;
+                    }
+                    if (itemTime >= startOfMonth.getTime()) {
+                        countMonth++;
+                    }
+                });
+
+                $('#list-summary-total').text(total.toLocaleString('th-TH'));
+                $('#list-summary-today').text(countToday.toLocaleString('th-TH'));
+                $('#list-summary-yesterday').text(countYesterday.toLocaleString('th-TH'));
+                $('#list-summary-week').text(countWeek.toLocaleString('th-TH'));
+                $('#list-summary-month').text(countMonth.toLocaleString('th-TH'));
+
+            } catch(e) {
+                console.error("Error updating list summary cards:", e);
+            }
+        }
+
+        /**
+         * อัปเดตการ์ดสรุปข้อมูลและกราฟทั้งหมด (Used for initial load)
+         * @param {Array} data - ข้อมูล allServerData
+         */
+        function updateDashboard(data) {
+            if (!data || data.length === 0) {
+                console.warn("updateDashboard: No data to display.");
+                // Still call functions to clear/zero-out the dashboards
+                updateNotifyDashboard([]);
+                updateListDashboard([]);
+                return;
+            }
+
+            updateNotifyDashboard(data);
+            updateListDashboard(data);
+        }
+        // --- END: MODIFICATION (Req 3) ---
+
+
+        /**
+         * อัปเดต/สร้าง กราฟวงกลมสรุปสถานะ
+         */
+        function updateStatusDoughnut(completed, inProgress, notify) {
+            const ctx = document.getElementById('statusDoughnutChart');
+            if (!ctx) return;
+
+            if (statusDoughnutInstance) {
+                statusDoughnutInstance.destroy();
+            }
+
+            const total = completed + inProgress + notify;
+            // ========== START: MODIFICATION (Req 3) - Show empty chart if total is 0 ==========
+            if (total === 0) {
+                 statusDoughnutInstance = new Chart(ctx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['ไม่มีข้อมูล'],
+                        datasets: [{
+                            data: [1],
+                            backgroundColor: ['#e9ecef'], // Light gray
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '50%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false },
+                            datalabels: {
+                                color: '#6c757d',
+                                font: { weight: 'bold', family: "'Sarabun', sans-serif", size: 14 },
+                                formatter: () => 'ไม่มีข้อมูล'
+                            }
+                        }
+                    }
+                });
+                return; 
+            }
+            // ========== END: MODIFICATION (Req 3) ==========
+
+            statusDoughnutInstance = new Chart(ctx.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['เสร็จสิ้น', 'กำลังดำเนินการ', 'แจ้งผู้เกี่ยวข้อง'],
+                    datasets: [{
+                        data: [completed, inProgress, notify],
+                        backgroundColor: [
+                            chartStatusColors.completed,
+                            chartStatusColors.inProgress,
+                            chartStatusColors.notify
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '50%', // ทำให้เป็นวงแหวน
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: "'Sarabun', sans-serif", size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true,
+                            bodyFont: { family: "'Sarabun', sans-serif" },
+                            titleFont: { family: "'Sarabun', sans-serif" }
+                        },
+                        datalabels: {
+                            color: '#000',
+                            font: {
+                                weight: 'bold',
+                                family: "'Sarabun', sans-serif",
+                                size: 12
+                            },
+                            formatter: (value, context) => {
+                                if (value === 0) return '';
+                                const percentage = ((value / total) * 100).toFixed(0);
+                                return `${value.toLocaleString('th-TH')}\n(${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        /**
+         * อัปเดต/สร้าง กราฟแท่งสรุปกลุ่มงาน
+         */
+        function updateGroupBarChart(labels, completedData, inProgressData, notifyData) {
+            const ctx = document.getElementById('groupChart');
+            if (!ctx) return;
+
+            if (groupChartInstance) {
+                groupChartInstance.destroy();
+            }
+
+            // ========== START: MODIFICATION (Req 3) - Show empty chart if no labels ==========
+            if (!labels || labels.length === 0) {
+                groupChartInstance = new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                     data: {
+                        labels: ['ไม่มีข้อมูล'],
+                        datasets: [{
+                            label: 'ไม่มีข้อมูล',
+                            data: [0],
+                            backgroundColor: '#e9ecef'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: 'x',
+                        scales: {
+                            x: { stacked: true, ticks: { font: { family: "'Sarabun', sans-serif" } } },
+                            y: { stacked: true, beginAtZero: true, ticks: { font: { family: "'Sarabun', sans-serif" }, stepSize: 1 } }
+                        },
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: { enabled: false },
+                            datalabels: {
+                                color: '#6c757d',
+                                font: { weight: 'bold', family: "'Sarabun', sans-serif", size: 14 },
+                                formatter: () => 'ไม่มีข้อมูล'
+                            }
+                        }
+                    }
+                });
+                return;
+            }
+            // ========== END: MODIFICATION (Req 3) ==========
+
+
+            groupChartInstance = new Chart(ctx.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'เสร็จสิ้น',
+                            data: completedData,
+                            backgroundColor: chartStatusColors.completed,
+                        },
+                        {
+                            label: 'กำลังดำเนินการ',
+                            data: inProgressData,
+                            backgroundColor: chartStatusColors.inProgress,
+                        },
+                        {
+                            label: 'แจ้งผู้เกี่ยวข้อง',
+                            data: notifyData,
+                            backgroundColor: chartStatusColors.notify,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'x', // กราฟแท่งแนวตั้ง
+                    scales: {
+                        x: {
+                            stacked: true, // ซ้อนกันในแกน X
+                            ticks: {
+                                font: { family: "'Sarabun', sans-serif" }
+                            }
+                        },
+                        y: {
+                            stacked: true, // ซ้อนกันในแกน Y
+                            beginAtZero: true,
+                            ticks: {
+                                font: { family: "'Sarabun', sans-serif" },
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { family: "'Sarabun', sans-serif", size: 12 }
+                            }
+                        },
+                        tooltip: {
+                            enabled: true, // เปิดใช้งาน Tooltip
+                            mode: 'index',
+                            intersect: false,
+                            bodyFont: { family: "'Sarabun', sans-serif" },
+                            titleFont: { family: "'Sarabun', sans-serif" }
+                        },
+                        datalabels: {
+                            // เปิดการแสดงตัวเลข
+                            display: true,
+                            color: '#000',
+                            font: {
+                                weight: '500',
+                                family: "'Sarabun', sans-serif",
+                                size: 10
+                            },
+                            // ฟังก์ชันซ่อนค่าที่เป็น 0
+                            formatter: (value) => {
+                                return value > 0 ? value.toLocaleString('th-TH') : '';
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        // ========== END: MODIFICATION ==========
+
+
+        function updateFilterOptions(data) {
+            
+            // ========== START: MODIFICATION - CALL DASHBOARD UPDATE ==========
+            // ฟังก์ชันนี้จะอัปเดตการ์ดและกราฟทั้งหมด (ครั้งแรก)
+            updateDashboard(data);
+            // ========== END: MODIFICATION ==========
+
+            // ========== START: MODIFICATION 1 - Trim Priority Data ==========
+            // const priorities = [...new Set(data.map(item => item.priority ? item.priority.trim() : null).filter(Boolean))];
+            // [MODIFICATION] Clean priority data robustly
+            const priorities = [...new Set(data.map(item => 
+                item.priority ? item.priority.trim() : null
+            ).filter(Boolean))];
+            // ========== END: MODIFICATION 1 ==========
+            let statuses = [...new Set(data.map(item => item.status))];
+            // const forwardTos = [...new Set(data.map(item => item.forwardTo).filter(Boolean))]; // [MODIFICATION] Removed
+            
+            // [MODIFICATION] Clean forwardTo data robustly
+            // const forwardTos = [...new Set(data.map(item => 
+            //     item.forwardTo ? item.forwardTo.trim().replace(/\p{C}/gu, '') : null
+            // ).filter(Boolean))];
+
+
+            // ========== START: MODIFICATION 1.5 & 2.4 - Populate Year Filters ==========
+            // Get unique years from 'receiptNumber' (e.g., "123/2567")
+            const receiptYears = [...new Set(data.map(item => item.receiptNumber ? item.receiptNumber.split('/')[1] : null).filter(Boolean))].sort((a, b) => b - a);
+            // Get unique years from 'dateReceived' (e.g., "23 ต.ค. 2567")
+            const dateYears = [...new Set(data.map(item => item.dateReceived ? item.dateReceived.split(' ')[2] : null).filter(Boolean))].sort((a, b) => b - a);
+
+            $('#notifyYearFilter').html('<option value="">-- ทุกปี พ.ศ. --</option>').append(receiptYears.map(y => `<option value="${y}">${y}</option>`));
+            $('#docYearFilter').html('<option value="">-- ทุกปี พ.ศ. --</option>').append(dateYears.map(y => `<option value="${y}">${y}</option>`));
+            // ========== END: MODIFICATION 1.5 & 2.4 ==========
+
+
+            if (!statuses.includes('เสนอ ผอ.')) {
+                statuses.unshift('เสนอ ผอ.');
+            }
+
+            $('#priorityFilter, #notifyPriorityFilter').html('<option value="">-- ทุกระดับความสำคัญ --</option>').append(priorities.map(p => `<option value="${p}">${p}</option>`));
+            // 5. Keep statusFilter populate for notifyTable
+            $('#statusFilter, #notifyStatusFilter').html('<option value="">-- ทุกสถานะ --</option>').append(statuses.map(s => `<option value="${s}">${s}</option>`));
+
+            // [MODIFICATION] Removed TomSelect population
+            /*
+            if (notifyForwardToFilter) {
+                notifyForwardToFilter.clearOptions();
+                notifyForwardToFilter.addOptions(forwardTos.map(f => ({value: f, text: f})));
+            }
+            */
+        }
+
+        // --- FILE UPLOAD & AI PROCESSING ---
+        function setupFileUpload() {
+            const fileInput = document.getElementById('fileUpload');
+
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                const fileNameDisplay = $('#fileNameDisplay');
+                const pdfPreviewContainer = $('#pdf-preview-container');
+
+                if (file && file.type === 'application/pdf') {
+                    currentPdfFile = file;
+                    fileNameDisplay.html(`<i class="fas fa-check-circle text-success me-2"></i> ${file.name}`).removeClass('d-none');
+                    pdfPreviewContainer.removeClass('d-none');
+                    renderPdf(file);
+                    aiPdfSummaryModal.show();
+                } else {
+                    currentPdfFile = null;
+                    fileNameDisplay.addClass('d-none');
+                    pdfPreviewContainer.addClass('d-none');
+                    if (file) {
+                        showError('กรุณาเลือกไฟล์ PDF เท่านั้น');
+                        fileInput.value = '';
+                    }
+                }
+            });
+        }
+
+        async function renderPdf(file) {
+            const fileReader = new FileReader();
+            fileReader.onload = async function() {
+                const typedarray = new Uint8Array(this.result);
+                try {
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    const page = await pdf.getPage(1);
+                    const canvas = document.getElementById('pdf-canvas');
+                    const context = canvas.getContext('2d');
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.height = viewport.height;
+                    canvas.width = viewport.width;
+                    await page.render({ canvasContext: context, viewport: viewport }).promise;
+                } catch (error) {
+                    console.error('Error rendering PDF:', error);
+                    showError('ไม่สามารถแสดงตัวอย่างไฟล์ PDF ได้');
+                }
+            };
+            fileReader.readAsArrayBuffer(file);
+        }
+
+        function setupEventListeners(forwardToSelect) {
+
+            // ========== START: MODIFICATION - Add Status Modal Tab Listener ==========
+            // --- Listener for Status Modal Tab Changes ---
+            const statusModalTabs = document.querySelectorAll('#statusTab button[data-bs-toggle="tab"]');
+            statusModalTabs.forEach(tab => {
+                tab.addEventListener('shown.bs.tab', event => {
+                    const targetId = event.target.id;
+                    const isCompleted = $('#statusCompleted').is(':checked');
+
+                    // --- START: MODIFICATION (Req 1) - Check if deputy is saved ---
+                    // Find the current row's data to check status
+                    const docId = $('#statusDocId').val();
+                    const data = allServerData.find(d => d.id == docId); // Find the data
+                    const isDeputySaved = data && (data.deputyAck === 'true' || (data.deputyComment || '').trim() !== '');
+                    // --- END: MODIFICATION ---
+
+                    if (targetId === 'status-tab-director') {
+                        $('#saveStatusModalBtn').hide();
+                        $('#recorderIdContainer').addClass('d-none');
+                        $('#deputyRecorderIdContainer').addClass('d-none');
+                    } else if (targetId === 'status-tab-deputy') {
+                        
+                        // --- START: MODIFICATION (Req 1) - Hide button if deputy is saved ---
+                        if (isDeputySaved || isCompleted) {
+                            $('#saveStatusModalBtn').hide();
+                            $('#deputyRecorderIdContainer').addClass('d-none');
+                        } else {
+                            $('#saveStatusModalBtn').show().text('บันทึกความเห็นรองฯ').data('action', 'deputy');
+                             $('#deputyRecorderIdContainer').removeClass('d-none');
+                        }
+                        // --- END: MODIFICATION ---
+                        
+                        $('#recorderIdContainer').addClass('d-none');
+                        // Show recorder ID only if not completed (Original logic moved into check above)
+                        /*
+                        if (!isCompleted) {
+                            $('#deputyRecorderIdContainer').removeClass('d-none');
+                        }
+                        */
+                    } else if (targetId === 'status-tab-action') {
+                        $('#saveStatusModalBtn').show().text('บันทึกการดำเนินการ').data('action', 'action');
+                        $('#deputyRecorderIdContainer').addClass('d-none');
+                        // Show recorder ID only if not completed
+                        if (!isCompleted) {
+                            $('#recorderIdContainer').removeClass('d-none');
+                        }
+                    }
+                });
+            });
+            // ========== END: MODIFICATION ==========
+
+            $('#confirmPdfSummaryAI').on('click', async function() {
+                aiPdfSummaryModal.hide();
+                if (!currentPdfFile) {
+                    showError('ไม่พบไฟล์ PDF ที่จะวิเคราะห์');
+                    return;
+                }
+
+                // 1. Use LoadingOverlay
+                showLoading('AI กำลังวิเคราะห์ข้อมูลจาก PDF...');
+
+                try {
+                    const arrayBuffer = await new Promise((resolve, reject) => {
+                        const reader = new FileReader();
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsArrayBuffer(currentPdfFile);
+                    });
+
+                    const typedarray = new Uint8Array(arrayBuffer);
+                    const pdf = await pdfjsLib.getDocument(typedarray).promise;
+                    const page = await pdf.getPage(1);
+                    const textContent = await page.getTextContent();
+                    const pageText = textContent.items.map(item => item.str).join(' ');
+
+                    // ========== START: MODIFICATION - Use latest model ==========
+                    const modelName = 'gemini-2.5-flash-preview-09-2025'; // Updated model
+                    // ========== END: MODIFICATION ==========
+                    let requestBody;
+                    
+                    // ========== START: MODIFICATION - Updated AI Prompt to return pieces (Fixed: กำหนดแล้วเสร็จ) ==========
+                    const prompt = `คุณคือผู้ช่วยวิเคราะห์เอกสารราชการไทย
+กรุณาดึงข้อมูลจากเอกสาร PDF หน้าแรกนี้และตอบกลับในรูปแบบ JSON object ที่ถูกต้องเท่านั้น โดยไม่ต้องมี markdown backticks
+ปฏิบัติตามคำแนะนำอย่างเคร่งครัด:
+
+1.  **number**: ค้นหาข้อความ "ที่" บริเวณมุมบนซ้าย (ก่อนตราครุฑ) และดึงข้อความทั้งหมดที่ตามหลังมาในบรรทัดเดียวกัน (เช่น "ศธ 04138/1234")
+2.  **title**: ค้นหาข้อความ "เรื่อง" และดึงข้อความทั้งหมดที่อยู่ในบรรทัดถัดไป
+3.  **from**: ค้นหาข้อความบริเวณมุมบนขวา (หลังตราครุฑ) ดึงเฉพาะชื่อหน่วยงานต้นทางเท่านั้น **โดยไม่รวมที่อยู่** (เช่น ถนน, ตำบล, อำเภอ, จังหวัด, รหัสไปรษณีย์)
+4.  **to**: ค้นหาข้อความ "เรียน" และดึงข้อความทั้งหมดที่ตามหลังมา (เช่น "ผู้อำนวยการโรงเรียนปากช่อง")
+5.  **priority**: ค้นหาข้อความที่อยู่ "เหนือ" เลขที่หนังสือ (number) เช่น "ด่วนที่สุด", "ด่วนมาก", "ด่วน" หากไม่พบข้อความใดๆ ให้ใช้ค่า "ปกติ"
+6.  **forwardTo**: จากเนื้อหา ให้วิเคราะห์ว่าเกี่ยวข้องกับกลุ่มงานใดมากที่สุด (เลือกค่าที่ตรงที่สุดจาก: 'กลุ่มบริหารวิชาการ', 'กลุ่มบริหารงบประมาณ', 'กลุ่มบริหารงานบุคคล', 'กลุ่มบริหารทั่วไป', หรือ '')
+7.  **summary_action**: ค้นหาย่อหน้าสำคัญที่อยู่ "ก่อน" บรรทัด "จึงเรียนมา..." (เช่น จึงเรียนมาเพื่อโปรดทราบ, จึงเรียนมาเพื่อโปรดพิจารณา) และสรุป "สิ่งที่ต้องทำ" หรือ "คำสั่ง" จากย่อหน้านั้น
+8.  **summary_due_date**: จากเนื้อหาเอกสาร (โดยเฉพาะย่อหน้าสำคัญ) ให้ค้นหา "วันที่กำหนดแล้วเสร็จ" หรือ "วันที่กำหนดส่ง" หากไม่พบ ให้ใส่ 'ไม่มีกำหนด'
+
+สำคัญมาก:
+- หากเจอตัวเลขไทยในข้อมูล ให้แปลงเป็นเลขอารบิกก่อนส่งค่ากลับมาเสมอ
+- ถ้าหาข้อมูลส่วนไหนไม่เจอให้ใส่ค่าเป็น "" หรือ null
+
+{
+  "number": "",
+  "title": "",
+  "from": "",
+  "to": "",
+  "priority": "ปกติ",
+  "forwardTo": "",
+  "summary_action": "",
+  "summary_due_date": "ไม่มีกำหนด"
+}`;
+                    // ========== END: MODIFICATION ==========
+
+                    if (!pageText.trim()) {
+                        // 1. Use LoadingOverlay
+                        showLoading('PDF ไม่มีข้อความ, กำลังใช้ AI อ่านรูปภาพ...');
+                        const canvas = document.createElement('canvas');
+                        const context = canvas.getContext('2d');
+                        const viewport = page.getViewport({ scale: 2.0 });
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        await page.render({ canvasContext: context, viewport: viewport }).promise;
+                        const base64Data = canvas.toDataURL('image/png').split(',')[1];
+                        
+                        requestBody = {
+                            contents: [{
+                                parts: [ { text: prompt }, { inlineData: { mimeType: 'image/png', data: base64Data } } ]
+                            }]
+                        };
+                    } else {
+                        const combinedPrompt = `${prompt}\n\nเนื้อหาจาก PDF หน้าแรก:\n${pageText.substring(0, 4000)}`;
+                        requestBody = { contents: [{ parts: [{ text: combinedPrompt }] }] };
+                    }
+
+                    // ========== START: MODIFICATION - Use fetchWithExponentialBackoff ==========
+                    const result = await fetchWithExponentialBackoff(
+                        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`, 
+                        {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(requestBody)
+                        }
+                    );
+                    // ========== END: MODIFICATION ==========
+
+                    const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if (!textResponse) throw new Error("ไม่ได้รับข้อมูลที่ถูกต้องจาก AI");
+
+                    const jsonString = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+                    tempAiData = JSON.parse(jsonString);
+
+                    // --- RENDER PDF HEADER PREVIEW ---
+                    const verifyCanvas = document.getElementById('aiVerifyCanvas');
+                    const verifyContext = verifyCanvas.getContext('2d');
+                    const viewport = page.getViewport({ scale: 1.5 });
+
+                    const desiredHeight = viewport.height * 0.4; // Show the top 40%
+                    verifyCanvas.width = viewport.width;
+                    verifyCanvas.height = desiredHeight;
+
+                    await page.render({
+                        canvasContext: verifyContext,
+                        viewport: viewport
+                    }).promise;
+
+
+                    let docNumber = tempAiData.number || '';
+                    docNumber = convertThaiToArabicNumerals(docNumber).replace(/^ที่\s*/, '').trim();
+                    
+                    $('#aiVerifyNumber').val(docNumber);
+                    
+                    // ========== START: MODIFICATION - Show modal directly, listener will hide overlay ==========
+                    // สั่งให้แสดงโมดอลตามปกติ
+                    //ตัว event listener ที่เราเพิ่มไว้ใน ready() จะจัดการซ่อน overlay เอง
+                    aiVerificationModal.show(); 
+                    // ========== END: MODIFICATION ==========
+
+
+                } catch (error) {
+                    console.error('AI PDF Analyze Error:', error);
+                    showError(`เกิดข้อผิดพลาดในการวิเคราะห์ PDF: ${error.message}`); // showError will hide overlay
+                }
+            });
+
+
+            $('#confirmAiData').on('click', function() {
+                const verifiedNumber = $('#aiVerifyNumber').val();
+
+                $('#number').val(verifiedNumber);
+                $('#title').val(tempAiData.title || '');
+                $('#from').val(tempAiData.from || '');
+                $('#to').val(tempAiData.to || '');
+                
+                // ========== START: MODIFICATION - Manually construct summary (Fixed: กำหนดแล้วเสร็จ) ==========
+                // สร้าง summary string ด้วยตนเอง
+                const summaryTitle = tempAiData.title || '[ไม่มีข้อมูล]';
+                const summaryFrom = tempAiData.from || '[ไม่มีข้อมูล]'; // AI จะส่งชื่อย่อมาใน from
+                const summaryAction = tempAiData.summary_action || '[ไม่มีข้อมูล]';
+                const summaryDueDate = tempAiData.summary_due_date || 'ไม่มีกำหนด';
+
+                // START: USER REQUEST - Revert to line breaks (Fixed word)
+                const summaryText = `เรียน : ผู้อำนวยการโรงเรียนปากช่อง
+เรื่อง : ${summaryTitle}
+จาก : ${summaryFrom}
+การดำเนินการ : ${summaryAction}
+กำหนดแล้วเสร็จ : ${summaryDueDate}`;
+                // END: USER REQUEST
+                
+                $('#summary').val(summaryText);
+                // ========== END: MODIFICATION ==========
+                
+                if (tempAiData.category) { // We keep this line in case old JSON still has it, but AI won't fill it
+                    $('#category').val(tempAiData.category);
+                }
+                if (tempAiData.priority) {
+                    $('#priority').val(tempAiData.priority);
+                }
+
+                // ========== START: MODIFICATION - Set forwardTo from AI ==========
+                if (tempAiData.forwardTo && forwardToSelect) {
+                    // ตรวจสอบว่าค่าที่ AI ส่งมามีใน <option> หรือไม่
+                    if (forwardToSelect.options[tempAiData.forwardTo]) {
+                        forwardToSelect.setValue(tempAiData.forwardTo);
+                    } else {
+                        // ถ้าไม่มี, อาจจะเพิ่มเป็น option ใหม่ (ถ้าต้องการ) หรือปล่อยว่าง
+                        console.warn(`AI suggested forwardTo "${tempAiData.forwardTo}" which is not in the list.`);
+                    }
+                }
+                // ========== END: MODIFICATION ==========
+
+                if (tempAiData.dueDate) {
+                    try {
+                        const date = new Date(tempAiData.dueDate);
+                        if (!isNaN(date)) {
+                           $('#dueDate').datepicker('update', date);
+                        }
+                    } catch(e) { console.error("Could not parse AI due date:", e); }
+                }
+
+                $('#status').val('แจ้งผู้เกี่ยวข้อง');
+
+                aiVerificationModal.hide();
+                showSuccess('กรอกข้อมูลด้วย AI สำเร็จ!');
+            });
+
+            $('#docForm').on('submit', function(e) {
+                e.preventDefault();
+                // 4. Bootstrap validation check
+                if (!this.checkValidity()) {
+                    e.stopPropagation();
+                    this.classList.add('was-validated');
+                    return;
+                }
+                this.classList.add('was-validated'); // Show validation state even if valid
+
+
+				// ========== START: USER REQUEST 3 - Validate Admin Officer ID against Receiver ==========
+                const adminOfficerPassword = $('#adminOfficerId').val();
+                const receiverName = tomSelectReceiver ? tomSelectReceiver.getValue() : ''; // Get value from TomSelect
+                
+                if (!receiverName) {
+                     showError('กรุณาเลือก "ผู้รับ"');
+                     // Manually add error state to TomSelect wrapper
+                     const receiverElement = document.getElementById('receiver');
+                     if (receiverElement && receiverElement.tomselect) {
+                         receiverElement.tomselect.wrapper.classList.add('is-invalid');
+                     }
+                     
+                     e.stopPropagation();
+                     this.classList.add('was-validated');
+                     return;
+                } else {
+                    // Clear error state if valid
+                    const receiverElement = document.getElementById('receiver');
+                     if (receiverElement && receiverElement.tomselect) {
+                         receiverElement.tomselect.wrapper.classList.remove('is-invalid');
+                     }
+                }
+
+                // Check against allUsersData for all three conditions
+                const validOfficer = allUsersData.find(u => 
+                    u.password === adminOfficerPassword && 
+                    u.role === 'Officer' &&
+                    u.name === receiverName // NEW condition
+                );
+                
+                if (!validOfficer) {
+                    showError('รหัสเจ้าหน้าที่ธุรการไม่ถูกต้อง');
+                    $('#adminOfficerId').val(''); // Clear invalid password
+                    $('#adminOfficerId').addClass('is-invalid'); // Show validation error
+                    
+                    // Stop form submission
+                    e.stopPropagation();
+                    this.classList.add('was-validated'); // Ensure validation state is shown
+                    return; 
+                }
+                
+                // If valid, remove invalid state just in case it was set before
+                $('#adminOfficerId').removeClass('is-invalid');
+                // ========== END: USER REQUEST 3 ==========
+
+
+
+
+                // ========== START: MODIFICATION - Change loading text based on file presence ==========
+                // 1. Use LoadingOverlay
+                const file = $('#fileUpload')[0].files[0];
+                if (file) {
+                    showLoading('กำลังประมวลผลและอัปโหลดไฟล์ (อาจใช้เวลาสักครู่)...');
+                } else {
+                    showLoading('กำลังบันทึกข้อมูล...');
+                }
+                // ========== END: MODIFICATION ==========
+
+                const form = this;
+                // const file = $('#fileUpload')[0].files[0]; // Moved up
+                const fr = new FileReader();
+
+                const submitData = () => {
+                    const formData = new FormData(form);
+                    formData.append('action', 'register');
+                    const newId = (allServerData.length > 0 ? Math.max(...allServerData.map(d => parseInt(d.id || 0))) : 0) + 1;
+                    formData.append('id', newId);
+
+                    if (file) {
+                        formData.append('fileName', file.name);
+                        formData.append('fileContent', fr.result.split(',')[1]);
+                        formData.append('mimeType', file.type);
+                    }
+
+                    fetch(WEB_APP_URL, { method: 'POST', body: formData })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.success) throw new Error(res.message);
+                        showSuccess(res.message); // showSuccess will hide overlay
+
+                        if (forwardToSelect && typeof forwardToSelect.clear === 'function') {
+                            forwardToSelect.clear();
+                        }
+
+						// ========== START: MODIFICATION (Req 3) - Reset TomSelect ==========
+                        if (tomSelectReceiver) tomSelectReceiver.clear();
+                        // ========== END: MODIFICATION ==========
+
+
+                        form.reset();
+                        $('#dateReceived').val(formatDateThaiFromDateObj(new Date()));
+                        $('#status').val('แจ้งผู้เกี่ยวข้อง');
+                        form.classList.remove('was-validated'); // Reset validation state
+                        $('#fileNameDisplay').addClass('d-none');
+                        $('#pdf-preview-container').addClass('d-none');
+                        currentPdfFile = null;
+
+                        loadInitialData();
+                        
+                        // Close modal and show notify tab
+                        registerModal.hide();
+                        new bootstrap.Tab('#pills-notify-tab').show(); // Ensure we land on the notify tab
+
+                    }).catch(err => showError(err.message)); // showError will hide overlay
+                };
+
+                if (file) { fr.readAsDataURL(file); fr.onload = submitData; fr.onerror = () => showError('ไม่สามารถอ่านไฟล์ได้'); }
+                else { submitData(); }
+            });
+
+            $('#notifyTable tbody').on('click', '.btn-add-comment', function () {
+                const data = notifyTable.row($(this).parents('tr')).data();
+                $('#commentForm')[0].reset();
+                $('#commentDocId').val(data.id);
+                $('#commentBookTitle').text(data.title);
+                $('#commentDate').val(formatDateThaiFromDateObj(new Date()));
+                
+                // ========== START: MODIFICATION 1.1 & 1.2 (AND USER REQUEST: Bold + <hr>) - FIXING SPACING ==========
+                const summary = data.summary || 'ไม่มีข้อมูลสรุป';
+                let summaryHtml = '';
+
+                // Define the style for the black HR (Crucial: Use margin-y small/none to control spacing)
+                const blackHrStyle = 'border-top: 1px solid black; margin: 5px 0;'; // Added small vertical margin back for readability.
+
+                // Check if summary already contains HTML
+                if (summary.includes('<strong') || summary.includes('hr>')) {
+                    summaryHtml = summary.replace(/\n/g, '<br>');
+                } else {
+                    // Apply formatting to plain text
+                    summaryHtml = summary
+                        .replace(/เรียน\s*:/g, '<strong>เรียน :</strong>')
+                        .replace(/เรื่อง\s*:/g, '<strong>เรื่อง :</strong>')
+                        .replace(/จาก\s*:/g, '<strong>จาก :</strong>')
+                        .replace(/การดำเนินการ\s*:/g, '<strong>การดำเนินการ :</strong>')
+                        .replace(/กำหนดแล้วเสร็จ\s*:/g, '<strong>กำหนดแล้วเสร็จ :</strong>');
+                        
+                    // Use split/join to ensure every single newline is handled.
+                    summaryHtml = summaryHtml.split('\n').map((line, index, arr) => {
+                        // Check if it's the last item, if so, don't add HR
+                        if (index === arr.length - 1) {
+                            // Trim trailing line breaks before last line content
+                            return line.trim(); 
+                        }
+                        // Middle line: content + <hr> (without extra <br> to control vertical space)
+                        return line.trim() + `<hr style="${blackHrStyle}">`; 
+                    }).join(''); // Join all parts without adding line breaks between mapped items.
+                }
+                
+                // Final cleanup: Remove any leading/trailing <br> or redundant tags.
+                summaryHtml = summaryHtml
+                    .replace(/<br><strong>/g, '</strong><br><strong>') // Fix bold text wrapping (replaces old logic)
+                    .replace(/<hr style="border-top: 1px solid black; margin: 5px 0;"><strong>/g, `<hr style="${blackHrStyle}"><strong>`)
+                    .replace(/<br><br>/g, '<br>')
+                    .trim();
+
+                // Final cleanup: remove trailing HR if it exists (Optional, but safe)
+                const trailingHR = `<hr style="${blackHrStyle}">`;
+                if (summaryHtml.endsWith(trailingHR)) {
+                    summaryHtml = summaryHtml.substring(0, summaryHtml.length - trailingHR.length);
+                }
+                
+                // Final adjustment: Add a single line break between the content and the HR line if needed.
+                summaryHtml = summaryHtml.replace(/([^\n])(<hr)/g, '$1<br>$2'); 
+
+
+                $('#commentSummaryDisplay').html(summaryHtml);
+
+                // แสดง/ซ่อน ลิงก์ไฟล์แนบ
+                if (data.fileName) {
+                    $('#commentFileLink').attr('href', data.fileName).show();
+                } else {
+                    $('#commentFileLink').hide();
+                }
+                // ========== END: MODIFICATION 1.1 & 1.2 ==========
+
+                $('#commentForwardTo').val(data.forwardTo);
+                isPreloadedSignature = false; // [MODIFICATION] Reset flag when opening modal
+                editCommentModal.show();
+            });
+
+            $('#notifyTable tbody').on('click', '.btn-view-comment', function () {
+                const data = notifyTable.row($(this).parents('tr')).data();
+                $('#viewBookTitle').text(data.title);
+                $('#viewCommentDate').text(data.directorCommentDate);
+
+                // START: USER REQUEST - Format summary for viewing (Bold + <hr>) - FIXING SPACING
+                const summary = data.summary || 'ไม่มีข้อมูลสรุป';
+                let summaryHtml = '';
+
+                // Define the style for the black HR (Crucial: Use margin-y small/none to control spacing)
+                const blackHrStyle = 'border-top: 1px solid black; margin: 5px 0;';
+
+                // Check if the summary already contains HTML formatting from new AI entries
+                if (summary.includes('<strong') || summary.includes('hr>')) {
+                    // It's already formatted, just replace newlines for display
+                    summaryHtml = summary.replace(/\n/g, '<br>');
+                } else {
+                    // It's plain text (old entry), apply new formatting
+                    summaryHtml = summary
+                        .replace(/เรียน\s*:/g, '<strong>เรียน :</strong>')
+                        .replace(/เรื่อง\s*:/g, '<strong>เรื่อง :</strong>')
+                        .replace(/จาก\s*:/g, '<strong>จาก :</strong>')
+                        .replace(/การดำเนินการ\s*:/g, '<strong>การดำเนินการ :</strong>')
+                        .replace(/กำหนดแล้วเสร็จ\s*:/g, '<strong>กำหนดแล้วเสร็จ :</strong>');
+
+                    // Use split/join to ensure every single newline is handled.
+                    summaryHtml = summaryHtml.split('\n').map((line, index, arr) => {
+                         // Check if it's the last item, if so, don't add HR
+                        if (index === arr.length - 1) {
+                            return line.trim();
+                        }
+                        // Middle line: content + <hr> (without extra <br> to control vertical space)
+                        return line.trim() + `<hr style="${blackHrStyle}">`;
+                    }).join(''); // Join all parts without adding line breaks between mapped items.
+                }
+                
+                // Final cleanup: Remove any leading/trailing <br> or redundant tags.
+                summaryHtml = summaryHtml
+                    .replace(/<br><strong>/g, '</strong><br><strong>') // Fix bold text wrapping (replaces old logic)
+                    .replace(/<hr style="border-top: 1px solid black; margin: 5px 0;"><strong>/g, `<hr style="${blackHrStyle}"><strong>`)
+                    .replace(/<br><br>/g, '<br>')
+                    .trim();
+
+                // Final adjustment: Add a single line break between the content and the HR line if needed.
+                summaryHtml = summaryHtml.replace(/([^\n])(<hr)/g, '$1<br>$2'); 
+
+                // Final cleanup: remove trailing HR if it exists (Optional, but safe)
+                const trailingHR = `<hr style="${blackHrStyle}">`;
+                if (summaryHtml.endsWith(trailingHR)) {
+                    summaryHtml = summaryHtml.substring(0, summaryHtml.length - trailingHR.length);
+                }
+
+                $('#viewSummaryText').html(summaryHtml);
+                // END: USER REQUEST
+                
+                // START: MODIFICATION (Req 2) - Show/hide Read More link
+                if (data.fileName) {
+                    $('#viewCommentFileLink').attr('href', data.fileName).show();
+                } else {
+                    $('#viewCommentFileLink').hide();
+                }
+                // END: MODIFICATION (Req 2)
+
+                $('#viewActions').text(data.directorActions || '-');
+                $('#viewCommentText').text(data.directorComment || 'ไม่มีความเห็นเพิ่มเติม');
+                $('#viewSignature').attr('src', data.directorSignature || 'https://placehold.co/400x150/f8f9fa/6c757d?text=No+Signature');
+                viewCommentModal.show();
+            });
+
+            // ========== START: MODIFICATION - Update status modal logic for tabs ==========
+            $('#notifyTable tbody').on('click', '.status-progress-bar-wrapper', function () {
+                const data = notifyTable.row($(this).closest('tr')).data();
+				
+				// ========== START: USER REQUEST 4 - Check for 'เสนอ ผอ.' status ==========
+                // Calculate effective status (must match renderer logic)
+                let currentStatus = data.status;
+                if (!data.directorCommentDate && (currentStatus === 'แจ้งผู้เกี่ยวข้อง' || currentStatus === 'รอตอบรับ')) {
+                    currentStatus = 'เสนอ ผอ.';
+                }
+                
+                // If status is 'เสนอ ผอ.', show alert and stop.
+                if (currentStatus === 'เสนอ ผอ.') {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'รอดำเนินการ',
+                        text: 'อยู่ระหว่างรอความเห็นจาก ผอ.',
+                        confirmButtonText: 'ตกลง'
+                    });
+                    return; // Do not open the modal
+                }
+                // ========== END: USER REQUEST 4 ==========
+				
+				
+				
+                $('#statusDocId').val(data.id);
+
+                // --- START: MODIFICATION (Req 1, 2, 3) - Define flags ---
+                const isCompleted = data.status === 'เสร็จสิ้น';
+                // Check if deputy has saved data
+                const isDeputySaved = data.deputyAck === 'true' || (data.deputyComment || '').trim() !== '';
+
+                // (Req 3) Show/hide checkmarks on TABS
+                if (isDeputySaved) {
+                    $('#statusModal .deputy-saved-check').removeClass('d-none');
+                } else {
+                    $('#statusModal .deputy-saved-check').addClass('d-none');
+                }
+                // --- END: MODIFICATION ---
+                
+                // --- Reset all fields ---
+                $('#statusRecordDate').val(formatDateThaiFromDateObj(new Date()));
+                $('input[name="statusOptions"]').prop('checked', false);
+                $('#expectedDateContainer').addClass('d-none');
+                $('#recorderId').val('');
+                $('#deputyRecorderId').val(''); // <-- Reset new field
+                // ========== START: MODIFICATION (USER REQUEST) - Reset completion notes ==========
+                $('#completionNotes').val(''); 
+                $('#completionNotesContainer').addClass('d-none');
+                // ========== END: MODIFICATION (USER REQUEST) ==========
+
+                // --- Tab 1: Populate Director Comment ---
+                $('#statusDirForwardTo').text(data.forwardTo || '-');
+                $('#statusDirActions').text(data.directorActions || '-');
+                $('#statusDirCommentText').text(data.directorComment || 'ไม่มีความเห็นเพิ่มเติม');
+
+                // --- Tab 2: Populate Deputy Comment ---
+                $('#deputyAck').prop('checked', data.deputyAck === 'true');
+                $('#deputyComment').val(data.deputyComment || '');
+				
+				// ========== START: MODIFICATION (Req 2) - Set TomSelect value ==========
+                if (tomSelectDeputyAssign) {
+                    tomSelectDeputyAssign.setValue(data.deputyAssign || '');
+                }
+                // ========== END: MODIFICATION ==========
+				
+				
+                $('#deputyAssign').val(data.deputyAssign || '');
+                // (Recorder ID is reset above)
+                
+                // START: MODIFICATION (Req 3) - Show/hide icon vs checkbox
+                if (isDeputySaved) {
+                    $('#deputyAck').addClass('d-none'); // Hide checkbox
+                    $('#statusTabDeputyComment .deputy-saved-icon').removeClass('d-none'); // Show icon
+                } else {
+                    $('#deputyAck').removeClass('d-none'); // Show checkbox
+                    $('#statusTabDeputyComment .deputy-saved-icon').addClass('d-none'); // Hide icon
+                }
+                // END: MODIFICATION (Req 3)
+                
+                // START: MODIFICATION (Req 4) - Show/hide Read More link
+                if (data.fileName) {
+                    $('#deputyFileLink').attr('href', data.fileName).show();
+                } else {
+                    $('#deputyFileLink').hide();
+                }
+                // END: MODIFICATION (Req 4)
+
+                // --- Tab 3: Populate Action ---
+                const originalDueDate = data.dueDate || '';
+                $('#statusModal').data('original-due-date', originalDueDate); 
+                $('#expectedDate').datepicker('setDate', originalDueDate || null);
+                $('#expectedDate').val(originalDueDate); 
+
+                const originalRemarks = data.remarks || '';
+                $('#statusModal').data('original-remarks', originalRemarks);
+                // ========== START: MODIFICATION (USER REQUEST) - Populate completion notes ==========
+                $('#completionNotes').val(originalRemarks); // Populate textarea with remarks
+                // ========== END: MODIFICATION (USER REQUEST) ==========
+
+                // Pre-fill 'responsiblePerson' from 'deputyAssign' first, then from 'responsiblePerson'
+                // This ensures new assignments from deputy are picked up, but existing ones are kept
+                $('#responsiblePerson').val(data.responsiblePerson || data.deputyAssign || ''); 
+
+                // --- START: MODIFICATION (Req 1) ---
+                // Disable expectedDate if status is already saved as 'In Progress' or 'Completed'
+                const isDateLocked = (data.status === 'กำลังดำเนินการ' || data.status === 'เสร็จสิ้น');
+                $('#expectedDate').prop('disabled', isDateLocked);
+                // --- END: MODIFICATION (Req 1) ---
+
+                if(data.status === 'กำลังดำเนินการ') {
+                    $('#statusInProgress').prop('checked', true).trigger('change');
+                }
+
+                // --- Disable fields if 'เสร็จสิ้น' ---
+                if (data.status === 'เสร็จสิ้น') {
+                    $('#statusCompleted').prop('checked', true).trigger('change');
+                    $('#statusFieldset').prop('disabled', true); 
+                    $('#deputyFieldset').prop('disabled', true); // Disable deputy tab
+                    $('#recorderIdContainer').addClass('d-none'); 
+                    $('#deputyRecorderIdContainer').addClass('d-none'); // Hide deputy recorder
+                    $('#saveStatusModalBtn').addClass('d-none'); // Hide save button
+                } else {
+                    $('#statusFieldset').prop('disabled', false);
+                    
+                    // --- START: MODIFICATION (Req 1 & 2) ---
+                    if (isDeputySaved) {
+                        $('#deputyFieldset').prop('disabled', true); // Req 2: Readonly
+                    } else {
+                        $('#deputyFieldset').prop('disabled', false); // Enable
+                    }
+                    // --- END: MODIFICATION ---
+
+                    $('#recorderIdContainer').addClass('d-none'); // Hide by default
+                    $('#deputyRecorderIdContainer').addClass('d-none'); // Hide by default
+                    $('#saveStatusModalBtn').removeClass('d-none'); // Show save button
+                }
+
+                updateStatusStepper(data);
+                
+                // --- Reset to first tab ---
+                new bootstrap.Tab('#status-tab-director').show();
+
+                // --- Set initial button state based on default tab (Director) ---
+                $('#saveStatusModalBtn').hide();
+                $('#recorderIdContainer').addClass('d-none');
+                $('#deputyRecorderIdContainer').addClass('d-none');
+                
+                statusModal.show();
+            });
+
+            // Link "มอบหมาย" (Tab 2) to "ผู้รับผิดชอบ" (Tab 3)
+            $('#deputyAssign').on('input', function() {
+                $('#responsiblePerson').val($(this).val());
+            });
+            // ========== END: MODIFICATION ==========
+
+            // ========== START: MODIFICATION - Rewrite Save Button Logic (Req 1) ==========
+            $('#saveStatusModalBtn').on('click', function() {
+                const action = $(this).data('action');
+                const docId = $('#statusDocId').val();
+                
+                if (action === 'deputy') {
+                    // --- Save Deputy Comment ---
+                    const deputyPassword = $('#deputyRecorderId').val();
+                    if (!deputyPassword) {
+                        showError('กรุณากรอกรหัสผู้บันทึก (รองฯ)');
+                        return;
+                    }
+
+                    // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client
+                    const validDeputy = allUsersData.find(u => u.password === deputyPassword && u.role === 'SubDirector');
+                    if (!validDeputy) {
+                        showError('รหัสผู้บันทึก (รองฯ) ไม่ถูกต้อง หรือไม่มีสิทธิ์');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('action', 'saveDeputyComment');
+                    formData.append('id', docId);
+                    formData.append('deputyAck', $('#deputyAck').is(':checked'));
+                    formData.append('deputyComment', $('#deputyComment').val());
+                    // (Req 2) อ่านค่าจาก TomSelect
+                    formData.append('deputyAssign', tomSelectDeputyAssign ? tomSelectDeputyAssign.getValue() : '');
+                    formData.append('deputyRecorderId', deputyPassword); // ส่งรหัสที่ตรวจสอบแล้ว
+
+                    showLoading('กำลังบันทึกความเห็นรองฯ...');
+                    fetch(WEB_APP_URL, { method: 'POST', body: formData })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.success) throw new Error(res.message);
+                            // ... (ส่วนแสดง checkmark ... คงเดิม)
+                            showSuccess('บันทึกความเห็นรองฯ เรียบร้อย');
+                            setTimeout(() => {
+                                statusModal.hide();
+                                loadInitialData(); // Reload data
+                            }, 1000); 
+                        }).catch(err => showError(err.message));
+
+                } else if (action === 'action') {
+                    // --- Save Action ---
+                    const newStatus = $('input[name="statusOptions"]:checked').val();
+                    const recorderPassword = $('#recorderId').val();
+                    
+                    if (!newStatus) { 
+                        showError('กรุณาเลือกสถานะในแท็บ "การดำเนินการ"'); 
+                        return; 
+                    }
+                    if (!recorderPassword) {
+                        showError('กรุณากรอกรหัสผู้บันทึก');
+                        return;
+                    }
+
+                    // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client (สมมติว่า 'ผู้บันทึก' คือ 'Officer')
+                    //const validRecorder = allUsersData.find(u => u.password === recorderPassword && u.role === 'User');
+					const validRecorder = allUsersData.find(u => u.password === recorderPassword && (u.role === 'User' || u.role === 'Officer'));
+                    if (!validRecorder) {
+                        showError('รหัสผู้บันทึกไม่ถูกต้อง หรือไม่มีสิทธิ์');
+                        return;
+                    }
+
+                    const formData = new FormData();
+                    formData.append('action', 'updateStatus');
+                    formData.append('id', docId);
+                    formData.append('status', newStatus);
+                    // ... (ส่วน dueDate, remarks, responsiblePerson ... คงเดิม)
+                    formData.append('recorderId', recorderPassword); // ส่งรหัสที่ตรวจสอบแล้ว
+                    
+                    showLoading('กำลังอัปเดตสถานะ...');
+                    fetch(WEB_APP_URL, { method: 'POST', body: formData })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (!res.success) throw new Error(res.message);
+                            showSuccess('อัปเดตสถานะเรียบร้อย');
+                            statusModal.hide();
+                            loadInitialData();
+                        }).catch(err => showError(err.message));
+                }
+            });
+
+             $('#saveCommentBtn').on('click', function() {
+                const directorPassword = $('#recordId').val();
+
+                if ( (signaturePad.isEmpty() && !isPreloadedSignature) || !directorPassword) { 
+                    showError('กรุณากรอกข้อมูลให้ครบถ้วน ลงลายมือชื่อ และใส่รหัสบันทึก'); 
+                    return; 
+                }
+
+                // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client
+                const validDirector = allUsersData.find(u => u.password === directorPassword && u.role === 'Director');
+                if (!validDirector) {
+                    showError('รหัสบันทึก (ผอ.) ไม่ถูกต้อง หรือไม่มีสิทธิ์');
+                    return;
+                }
+
+                const docId = $('#commentDocId').val();
+                const actions = Array.from($('#commentForm input[type=checkbox]:checked')).map(cb => cb.value).join(', ');
+
+                const formData = new FormData();
+                formData.append('action', 'addComment');
+                formData.append('id', docId);
+                formData.append('directorComment', $('#directorComment').val());
+                formData.append('directorActions', actions);
+                formData.append('commentDate', $('#commentDate').val());
+                formData.append('signature', signaturePad.toDataURL());
+                formData.append('forwardTo', $('#commentForwardTo').val());
+                formData.append('recordId', directorPassword); // ส่งรหัสที่ตรวจสอบแล้ว
+
+                showLoading('กำลังบันทึกความเห็น...');
+                 fetch(WEB_APP_URL, { method: 'POST', body: formData })
+                    .then(res => res.json())
+                    .then(res => {
+                        if (!res.success) throw new Error(res.message);
+                        showSuccess('บันทึกความเห็นเรียบร้อย'); 
+                        editCommentModal.hide();
+                        loadInitialData();
+                    }).catch(err => showError(err.message));
+            });
+            // ========== END: MODIFICATION ==========
+
+            // ========== START: MODIFICATION (USER REQUEST) - Show/Hide notes textarea ==========
+             $('input[name="statusOptions"]').on('change', function() {
+                if (this.value === 'กำลังดำเนินการ') {
+                    $('#expectedDateContainer').removeClass('d-none');
+                    $('#completionNotesContainer').addClass('d-none'); // Hide notes
+                } else if (this.value === 'เสร็จสิ้น') {
+                    $('#expectedDateContainer').addClass('d-none');
+                    $('#completionNotesContainer').removeClass('d-none'); // Show notes
+                } else {
+                    // Hide both for any other status (e.g., if nothing is selected)
+                    $('#expectedDateContainer').addClass('d-none');
+                    $('#completionNotesContainer').addClass('d-none');
+                }
+            });
+            // ========== END: MODIFICATION (USER REQUEST) ==========
+
+            // ========== START: MODIFICATION - Add listener for loading signature ==========
+            $('#load-signature').on('click', function() {
+                if (!signaturePad) {
+                    showError('Signature pad is not ready.');
+                    return;
+                }
+
+                showLoading('กำลังโหลดลายเซ็น...');
+                
+                const signatureUrl = 'https://lh5.googleusercontent.com/d/1ObGK3olOOuct-ee0qQl7vfTulKbnCE86';
+                const canvas = document.getElementById('signature-pad');
+                const ctx = canvas.getContext('2d');
+                
+                const image = new Image();
+                image.crossOrigin = "Anonymous"; // <-- CRITICAL
+
+                image.onload = function() {
+                    signaturePad.clear(); // Clear the canvas first
+                    
+                    const canvasWidth = canvas.width;
+                    const canvasHeight = canvas.height;
+                    const imgWidth = image.width;
+                    const imgHeight = image.height;
+
+                    // Calculate scale ratio to fit image, but don't scale *up*
+                    const hRatio = canvasWidth / imgWidth;
+                    const vRatio = canvasHeight / imgHeight;
+                    const ratio = Math.min(hRatio, vRatio, 1); 
+                    
+                    const scaledWidth = imgWidth * ratio;
+                    const scaledHeight = imgHeight * ratio;
+                    
+                    // Center the image
+                    const x = (canvasWidth - scaledWidth) / 2;
+                    const y = (canvasHeight - scaledHeight) / 2;
+
+                    ctx.drawImage(image, x, y, scaledWidth, scaledHeight);
+                    isPreloadedSignature = true; // Set the flag
+                    $.LoadingOverlay("hide");
+                };
+                
+                image.onerror = function() {
+                    $.LoadingOverlay("hide");
+                    showError('ไม่สามารถโหลดลายเซ็นได้ (อาจเกิดจาก CORS หรือไม่พบรูป)');
+                };
+                
+                image.src = signatureUrl; // Start loading
+            });
+            // ========== END: MODIFICATION ==========
+        }
+        function updateStatusStepper(data) {
+            const steps = ['ลงทะเบียนรับ', 'เสนอ ผอ.', 'แจ้งผู้เกี่ยวข้อง', 'ดำเนินการ', 'เสร็จสิ้น'];
+            const dateReceived = data.dateReceived || '';
+            const directorCommentDate = data.directorCommentDate || '';
+            const completionDate = data.completionDate || ''; 
+            const dueDate = data.dueDate || ''; // <-- [USER REQUEST REVERTED] กลับมาใช้ Col N
+            // const dueDateFromColO = data.remarks || ''; // <-- ลบตรรกะ Col O ออก
+
+            let activeIndex = 0;
+            if (data.status === 'แจ้งผู้เกี่ยวข้อง' || (data.directorCommentDate && data.status ==='เสนอ ผอ.')) activeIndex = 2;
+            else if (data.status === 'กำลังดำเนินการ') activeIndex = 3;
+            else if (data.status === 'เสร็จสิ้น') activeIndex = 4;
+            else if (data.directorCommentDate) activeIndex = 1;
+
+
+            let stepperHtml = '<div class="stepper-wrapper">';
+            steps.forEach((step, index) => {
+                let itemClass = '';
+                if (index < activeIndex) itemClass = 'completed';
+                else if (index === activeIndex) itemClass = 'active';
+
+                let stepContent = index + 1;
+                if (index < activeIndex) stepContent = '<i class="fas fa-check"></i>';
+
+                let dateHtml = '';
+                if (index === 0) { // ลงทะเบียนรับ
+                    if(dateReceived) dateHtml = `<div class="step-date">${dateReceived}</div>`;
+                } else if (index === 1) { // เสนอ ผอ.
+                    if(directorCommentDate) dateHtml = `<div class="step-date">${directorCommentDate}</div>`;
+                
+                // --- START: MODIFICATION (USER REQUEST REVERTED) ---
+                } else if (index === 2) { // แจ้งผู้เกี่ยวข้อง
+                    // This step is active/complete after 'เสนอ ผอ.', so use the same date.
+                    if(directorCommentDate) dateHtml = `<div class="step-date">${directorCommentDate}</div>`;
+                } else if (index === 3) { // ดำเนินการ
+                    // This step shows the due date (from Col N) if the status is 'กำลังดำเนินการ' or 'เสร็จสิ้น'
+                    if (activeIndex >= 3 && dueDate) dateHtml = `<div class="step-date">${dueDate}</div>`;
+                // --- END: MODIFICATION (USER REQUEST REVERTED) ---
+                
+                } else if (index === 4 && data.status === 'เสร็จสิ้น') { // เสร็จสิ้น (index 4)
+                    if(completionDate) dateHtml = `<div class="step-date">${completionDate}</div>`;
+                }
+
+                stepperHtml += `<div class="stepper-item ${itemClass}"><div class="step-counter">${stepContent}</div><div class="step-name">${step}</div>${dateHtml}</div>`;
+            });
+            stepperHtml += '</div>';
+            $('#statusStepperContainer').html(stepperHtml);
+        }
+
+        // ========== START: MODIFICATION - Add fetchWithExponentialBackoff ==========
+        async function fetchWithExponentialBackoff(url, options, maxRetries = 5) {
+            let attempt = 0;
+            let delay = 1000; // 1 second
+
+            while (attempt < maxRetries) {
+                try {
+                    const response = await fetch(url, options);
+                    
+                    if (response.status === 429 || response.status === 500 || response.status === 503) {
+                        // These are retriable errors
+                        throw new Error(`Retriable error: ${response.status}`);
+                    }
+                    
+                    if (!response.ok) {
+                        // Non-retriable error
+                        const errorData = await response.json();
+                        throw new Error(errorData.error.message || `API request failed with status ${response.status}`);
+                    }
+                    
+                    return await response.json(); // Success
+
+                } catch (error) {
+                    console.warn(`Attempt ${attempt + 1} failed: ${error.message}. Retrying in ${delay / 1000}s...`);
+                    if (attempt === maxRetries - 1) {
+                        // Last attempt failed, re-throw the error
+                        throw new Error(`AI PDF Analyze Error: ${error.message}`);
+                    }
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    delay *= 2; // Exponential backoff
+                    attempt++;
+                }
+            }
+        }
+        // ========== END: MODIFICATION ==========
+
+
+        // 1. Updated Helper functions to use LoadingOverlay
+        const showLoading = title => $.LoadingOverlay("show"); // Title is not used by default overlay, but we keep signature
+        const showSuccess = title => {
+            $.LoadingOverlay("hide");
+            Swal.fire({ icon: 'success', title, showConfirmButton: false, timer: 1500 });
+        };
+        const showError = text => {
+            $.LoadingOverlay("hide");
+            Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text });
+        };
+    </script>
+    <!-- ========== END: MODIFICATION - RESTORED ENTIRE SCRIPT BLOCK ========== -->
+
+    <!-- ========== START: MODIFICATION - Replaced Clock Script ========== -->
+    <!-- Real-time Clock Script (New robust version) -->
+    <script>
+        // รอให้ HTML โหลดเสร็จก่อน
+        document.addEventListener('DOMContentLoaded', (event) => {
+            
+            const canvas = document.getElementById('clockCanvas');
+            if (!canvas || !canvas.getContext) {
+                console.error("Clock canvas not found.");
+                return;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            
+            // ========== START: MODIFICATION - Move constants outside loop ==========
+            // กำหนดตัวแปรทั้งหมดที่นี่
+            const days = ['วันอาทิตย์', 'วันจันทร์', 'วันอังคาร', 'วันพุธ', 'วันพฤหัสบดี', 'วันศุกร์', 'วันเสาร์'];
+            const months = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
+            // ========== END: MODIFICATION ==========
+
+
+            function updateClock() {
+                // ตรวจสอบ canvas ทุกครั้ง
+                if (canvas.width !== canvas.clientWidth) {
+                    canvas.width = canvas.clientWidth;
+                }
+
+                const width = canvas.width;
+                const height = canvas.height;
+                const now = new Date();
+                
+                // ========== START: MODIFICATION - Use pre-defined constants ==========
+                const dayName = days[now.getDay()];
+                const dayOfMonth = now.getDate();
+                const monthName = months[now.getMonth()]; 
+                const year = now.getFullYear() + 543; // Buddhist year
+                const timeString = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                // ========== END: MODIFICATION ==========
+
+                // Clear canvas
+                ctx.fillStyle = '#6c757d'; // bg-secondary
+                ctx.fillRect(0, 0, width, height);
+
+                // Set text styles
+                ctx.fillStyle = 'white';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                // Draw time string
+                ctx.font = 'bold 26px Sarabun, sans-serif';
+                ctx.fillText(`${dayName} ที่ ${dayOfMonth} ${monthName} พ.ศ. ${year} เวลา ${timeString} น.`, width / 2, height / 2);
+            }
+
+            // เริ่มทำงาน
+            setInterval(updateClock, 1000);
+            updateClock(); // เรียกครั้งแรกเลย
+            
+            // เพิ่ม listener สำหรับ resize
+            window.addEventListener('resize', updateClock);
+        });
+    </script>
+    <!-- ========== END: MODIFICATION - Replaced Clock Script ========== -->
+    </body>
+    <footer class="text-center no-print" style="background-color:#faff99; padding: 10px; border-top: 1px solid #e0e0e0; font-size: 0.9em; color: #555; width: 100%;">
+        :: Created and Develop by KT|Tanasarn Sirak ::
+        <div>
+            <a href="https://line.me/ti/p/3F7VGrqgUr" target="_blank"><i class="fa-solid fa-comments"></i></a> <a style="color:red;text-decoration:none;font-size:12px" href="https://line.me/ti/p/3F7VGrqgUr" target="_blank"> สอบถาม/แจ้งปัญหา :: <span style="font-size:12px;color:black">KT | Tanasarn Sirak © <span class="buddhist-year"></span></a>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            :: จำนวนผู้ใช้งาน ::<img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=uwgfnf4ee1nu15h57t14a9pnpf2h58za" border="0" title="website counter" alt="website counter" class="ml-2">
+        </div>
+    </footer>
+</html>
