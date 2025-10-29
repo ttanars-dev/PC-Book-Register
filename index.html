@@ -174,6 +174,8 @@
             border-bottom-right-radius: .375rem;
         }
         /* ========== END: MODIFICATION ========== */
+		
+		.banner img { width: 100%; max-height: 300px; object-fit: cover; border-radius: 10px; margin-bottom: 12px; display: block; background-color: #eee; border: 1px solid var(--border-color); shadow: sm; }
     </style>
 </head>
 <body class="bg-light">
@@ -182,11 +184,18 @@
         <div id="loading-progress" class="progress-bar progress-bar-striped progress-bar-animated bg-primary" role="progressbar" style="width: 100%"></div>
     </div>
 
-    <div class="container-fluid p-4 p-md-5">
-        <header class="mb-4 text-center">
-            <h3 class="display-5 fw-bold text-primary animate__animated animate__fadeInDown">ระบบแจ้งเวียนหนังสือราชการ</h3>
-            <p class="text-muted fs-4 animate__animated animate__fadeInUp" style="font-weight: 700;">โรงเรียนปากช่อง จังหวัดนครราชสีมา</p>
-		<div class="text-center mb-4 no-print">
+    <!--<div class="container-fluid p-2 p-md-2">-->
+	<div class="container-fluid">
+	<div class="card shadow-sm border-primary position-relative" style="padding: 10px; margin-bottom: 10px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);">
+        <header class="mb-5 text-center">
+            <!--<h3 class="display-5 fw-bold text-primary animate__animated animate__fadeInDown">ระบบแจ้งเวียนหนังสือราชการ</h3>
+            <p class="text-muted fs-4 animate__animated animate__fadeInUp" style="font-weight: 700;">โรงเรียนปากช่อง จังหวัดนครราชสีมา</p>-->
+			
+			<div class="banner shadow-sm border-primary position-relative">
+              <img src="https://lh5.googleusercontent.com/d/1mNpg79lAWrZp4jqMWYBRA2YYd1MmEhcN" alt="แบนเนอร์ฟอร์ม"> 
+			</div>
+			
+		<div class="text-center mb-4 ms-2 no-print">
         <marquee behavior="scroll" direction="left" style="color:#000000; font-size: 20px;" onmouseover="this.stop();" onmouseout="this.start();"> ยินดีต้อนรับเข้าสู่ระบบทะเบียนหนังสือรับ โรงเรียนปากช่อง :: ออกแบบและพัฒนาโดย KT | Tanasarn Sirak </marquee>
 		</div>
 		<canvas id="clockCanvas" height="50" class="container-fluid bg-secondary text-white p-2 rounded shadow-sm"></canvas>
@@ -275,10 +284,10 @@
                     </div>
                     <div class="tab-pane fade show active" id="pills-notify" role="tabpanel">
                         
-                        <!-- ========== START: MODIFICATION - Layout Update for 4 Cards ========== -->
+                        <!-- ========== START: MODIFICATION - Layout Update for 5 Cards ========== -->
                         <!-- 1. Summary Cards -->
                         <div class="row g-3 mb-3">
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg col-md-4 col-6"> <!-- Total -->
                                 <div class="summary-card bg-primary">
                                     <div class="summary-card-content">
                                         <p class="summary-card-title">ทั้งหมด</p>
@@ -287,7 +296,20 @@
                                     <div class="summary-card-icon"><i class="fas fa-layer-group"></i></div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
+
+                            <!-- ========== START: MODIFICATION (User Request) - Add Pending Director Card ========== -->
+                            <div class="col-lg col-md-4 col-6"> <!-- Pending Director -->
+                                <div class="summary-card bg-danger"> <!-- สีแดงสำหรับรอดำเนินการ -->
+                                    <div class="summary-card-content">
+                                        <p class="summary-card-title">เสนอ ผอ.</p>
+                                        <h3 class="summary-card-value" id="summary-card-pending-director">0</h3>
+                                    </div>
+                                    <div class="summary-card-icon"><i class="fas fa-user-tie"></i></div> <!-- ไอคอน ผอ. -->
+                                </div>
+                            </div>
+                            <!-- ========== END: MODIFICATION (User Request) ========== -->
+
+                            <div class="col-lg col-md-4 col-6"> <!-- Notify -->
                                 <div class="summary-card bg-info text-dark">
                                     <div class="summary-card-content">
                                         <p class="summary-card-title">แจ้งผู้เกี่ยวข้อง</p>
@@ -296,7 +318,7 @@
                                     <div class="summary-card-icon"><i class="fas fa-info-circle"></i></div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg col-md-6 col-6"> <!-- In Progress -->
                                 <div class="summary-card bg-warning text-dark">
                                     <div class="summary-card-content">
                                         <p class="summary-card-title">กำลังดำเนินการ</p>
@@ -305,7 +327,7 @@
                                     <div class="summary-card-icon"><i class="fas fa-tasks"></i></div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6">
+                            <div class="col-lg col-md-6 col-12"> <!-- Completed -->
                                 <div class="summary-card bg-success">
                                     <div class="summary-card-content">
                                         <p class="summary-card-title">เสร็จสิ้น</p>
@@ -414,6 +436,17 @@
                 </div>
             </div>
         </div>
+		
+		    <footer class="text-center no-print mt-2" style="background-color:#faff99; padding: 10px; border-top: 1px solid #e0e0e0; font-size: 0.9em; color: #555; width: 100%;">
+        :: Created and Develop by KT|Tanasarn Sirak ::
+        <div>
+            <a href="https://line.me/ti/p/3F7VGrqgUr" target="_blank"><i class="fa-solid fa-comments"></i></a> <a style="color:red;text-decoration:none;font-size:12px" href="https://line.me/ti/p/3F7VGrqgUr" target="_blank"> สอบถาม/แจ้งปัญหา :: <span style="font-size:12px;color:black">KT | Tanasarn Sirak © <span class="buddhist-year"></span></a>
+        </div>
+        <div class="d-flex justify-content-center align-items-center">
+            :: จำนวนผู้ใช้งาน ::<img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=uwgfnf4ee1nu15h57t14a9pnpf2h58za" border="0" title="website counter" alt="website counter" class="ml-2">
+        </div>
+		</footer>	
+	
     </div>
 
     <!-- Modals -->
@@ -545,6 +578,11 @@
                                     <label for="deputyAssign" class="form-label">มอบหมาย (ผู้รับผิดชอบ)</label>
                                     <!-- <input type="text" class="form-control" id="deputyAssign" placeholder="ใส่ชื่อ สกุล"> -->
 									<select id="deputyAssign" placeholder="ค้นหาผู้รับผิดชอบ..."></select>
+									
+									<!-- ========== START: MODIFICATION (เพิ่ม input readonly ที่ซ่อนไว้) ========== -->
+                                    <input type="text" class="form-control d-none" id="deputyAssignReadonly" readonly style="background-color: #e9ecef;">
+                                    <!-- ========== END: MODIFICATION ========== -->
+									
                                 </div>
                             </fieldset>
                             <!-- ========== START: MODIFICATION - Add Recorder ID for Deputy ========== -->
@@ -649,18 +687,20 @@
                 </div>
                 <div class="mb-3">
                     <label for="directorComment" class="form-label">ความเห็นเพิ่มเติม</label>
-                    <textarea class="form-control" id="directorComment" rows="3"></textarea>
+                    <textarea class="form-control" id="directorComment" rows="4"></textarea>
                 </div>
+                <!-- ========== START: MODIFICATION (User Request) - ซ่อนส่วนลายมือชื่อ ========== -->
+                <!--
                 <div class="mb-3 d-flex flex-column align-items-center">
                     <label class="form-label">ลงลายมือชื่อ</label>
                     <canvas id="signature-pad" width="400" height="150"></canvas>
-                    <!-- ========== START: MODIFICATION - Add Load Signature Button ========== -->
                     <div class="mt-2">
                         <button type="button" class="btn btn-outline-secondary btn-sm" id="clear-signature"><i class="fas fa-eraser me-1"></i> รีเซ็ต</button>
                         <button type="button" class="btn btn-primary btn-sm ms-2" id="load-signature"><i class="fas fa-file-image me-1"></i> ใช้ลายเซ็น</button>
                     </div>
-                    <!-- ========== END: MODIFICATION ========== -->
                 </div>
+                -->
+                <!-- ========== END: MODIFICATION (User Request) ========== -->
                 <div class="mb-3">
                     <label for="recordId" class="form-label">รหัสบันทึก</label>
                     <input type="text" class="form-control" id="recordId" placeholder="กรอกรหัสเพื่อยืนยัน...">
@@ -686,7 +726,7 @@
             <!-- END: MODIFICATION -->
             <p><strong>การดำเนินการ:</strong> <span id="viewActions"></span></p>
             <p><strong>ความเห็นเพิ่มเติม:</strong></p><p class="bg-light p-2 rounded" id="viewCommentText"></p>
-            <p><strong>ลายมือชื่อ:</strong></p><img id="viewSignature" class="img-fluid border rounded" alt="Signature">
+            <!--<p><strong>ลายมือชื่อ:</strong></p><img id="viewSignature" class="img-fluid border rounded" alt="Signature"> -->
         </div>
         <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button></div>
     </div></div></div>
@@ -741,14 +781,23 @@
                                 <!-- ========== END: MODIFICATION ========== -->
                                 <div class="col-12">
                                     <label for="summary" class="form-label">สรุปสาระสำคัญ</label>
-                                    <textarea class="form-control" id="summary" name="summary" rows="3" placeholder="สรุปเนื้อหาโดยย่อ... หรือแนบไฟล์ PDF เพื่อให้ AI กรอกข้อมูลอัตโนมัติ"></textarea>
+                                    <textarea class="form-control" id="summary" name="summary" rows="7" placeholder="สรุปเนื้อหาโดยย่อ... หรือแนบไฟล์ PDF เพื่อให้ AI กรอกข้อมูลอัตโนมัติ"></textarea>
                                 </div>
                                 <div class="col-12">
                                     <label for="fileUpload" class="form-label">แนบไฟล์หนังสือ (PDF เท่านั้น)</label>
                                     <input type="file" id="fileUpload" name="fileUpload" class="form-control" accept="application/pdf">
                                     <div id="fileNameDisplay" class="mt-2 d-none alert alert-success p-2"></div>
+                                    
+                                    <!-- ========== START: MODIFICATION (User Request) - Add Toggle Button ========== -->
+                                    <div class="text-center mt-2">
+                                        <button type="button" class="btn btn-primary d-none" id="showPdfPreviewBtn">
+                                            <i class="fas fa-eye me-2"></i>ดูหน้าหนังสือนำส่ง
+                                        </button>
+                                    </div>
+                                    <!-- ========== END: MODIFICATION ========== -->
+
                                     <div id="pdf-preview-container" class="mt-2 d-none text-center">
-                                        <canvas id="pdf-canvas" class="border rounded shadow-sm" style="max-width: 100%;"></canvas>
+                                        <canvas id="pdf-canvas" class="border rounded shadow-sm" style="max-width: 60%;"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -763,13 +812,7 @@
                                     <!-- 4. Validation feedback -->
                                     <div class="invalid-feedback">กรุณาเลือกวันที่รับ</div>
                                 </div>
-                                <div class="col-md-4">
-                                    <label for="receiver" class="form-label">ผู้รับ</label>
-                                    <!-- <input type="text" class="form-control" id="receiver" name="receiver" required> -->
-									<select id="receiver" name="receiver" required></select>
-                                    <!-- 4. Validation feedback -->
-                                    <div class="invalid-feedback">กรุณากรอกชื่อผู้รับ</div>
-                                </div>
+
                                 <div class="col-md-4"><label for="forwardTo" class="form-label">ถึง (กลุ่ม/กลุ่มงาน)</label><select id="forwardTo" name="forwardTo" placeholder="เลือกกลุ่มงาน/กลุ่มสาระฯ..." required><option value="">เลือกกลุ่มงาน/กลุ่มสาระฯ...</option>
                                     <option value="กลุ่มงานการจัดการศึกษา">กลุ่มงานการจัดการศึกษา</option>
                                     <option value="กลุ่มงานพัฒนาโครงการพิเศษ">กลุ่มงานพัฒนาโครงการพิเศษ</option>
@@ -782,13 +825,19 @@
                                 </select>
 								<!-- 5. Validation feedback -->
                                     <div class="invalid-feedback">กรุณากรอกชื่อกลุ่ม/กลุ่มงาน</div></div>
-                                <div class="col-md-4"><label for="assignTo" class="form-label">มอบหมาย</label><input type="text" class="form-control" id="assignTo" name="assignTo"></div>
+                                <!--<div class="col-md-4"><label for="assignTo" class="form-label">มอบหมาย</label><input type="text" class="form-control" id="assignTo" name="assignTo"></div>-->
                                 <div class="col-md-4"><label for="dueDate" class="form-label">กำหนดดำเนินการ</label><input type="text" class="form-control" id="dueDate" name="dueDate" placeholder="เลือกวันที่"></div>
                                 <div class="col-md-8"><label for="remarks" class="form-label">หมายเหตุ (ถ้ามี)</label><input type="text" class="form-control" id="remarks" name="remarks"></div>
                                 <!-- ========== START: MODIFICATION - Removed 'รอตอบรับ' option ========== -->
                                 <div class="col-md-4"><label for="status" class="form-label">สถานะหนังสือ</label><select id="status" name="status" class="form-select"><option selected>แจ้งผู้เกี่ยวข้อง</option><option>กำลังดำเนินการ</option><option>เสร็จสิ้น</option></select></div>
                                 <!-- ========== END: MODIFICATION ========== -->
-								
+								<div class="col-md-4">
+                                    <label for="receiver" class="form-label">ผู้รับ</label>
+                                    <!-- <input type="text" class="form-control" id="receiver" name="receiver" required> -->
+									<select id="receiver" name="receiver" required></select>
+                                    <!-- 4. Validation feedback -->
+                                    <div class="invalid-feedback">กรุณากรอกชื่อผู้รับ</div>
+                                </div>
 								<!-- ========== START: USER REQUEST 1 - Add Admin Officer ID ========== -->
                                 <div class="col-md-4">
                                     <label for="adminOfficerId" class="form-label">รหัสเจ้าหน้าที่ธุรการ</label>
@@ -1473,7 +1522,7 @@
                     */
                 });
             } else {
-                console.error("Could not find modal or signature canvas elements for event listener setup.");
+                //console.error("Could not find modal or signature canvas elements for event listener setup.");
             }
             // ========== END: MODIFICATION ==========
 
@@ -2131,6 +2180,21 @@
         }
 
         function setupEventListeners(forwardToSelect) {
+		
+		    // ========== START: MODIFICATION (User Request) - Add PDF Preview Toggle Button ==========
+            $('#showPdfPreviewBtn').on('click', function() {
+                const previewContainer = $('#pdf-preview-container');
+                previewContainer.toggleClass('d-none');
+
+                if (previewContainer.hasClass('d-none')) {
+                    // ถ้าตอนนี้ซ่อนอยู่
+                    $(this).html('<i class="fas fa-eye me-2"></i>ดูหน้าหนังสือนำส่ง');
+                } else {
+                    // ถ้าตอนนี้แสดงอยู่
+                    $(this).html('<i class="fas fa-eye-slash me-2"></i>ซ่อนตัวอย่าง');
+                }
+            });
+            // ========== END: MODIFICATION ==========
 
             // ========== START: MODIFICATION - Add Status Modal Tab Listener ==========
             // --- Listener for Status Modal Tab Changes ---
@@ -2480,6 +2544,11 @@
                         form.classList.remove('was-validated'); // Reset validation state
                         $('#fileNameDisplay').addClass('d-none');
                         $('#pdf-preview-container').addClass('d-none');
+						
+						// ========== START: MODIFICATION (User Request) - Reset button ==========
+						$('#showPdfPreviewBtn').addClass('d-none'); // ซ่อนปุ่มดูตัวอย่าง
+						// ========== END: MODIFICATION ==========
+				
                         currentPdfFile = null;
 
                         loadInitialData();
@@ -2724,14 +2793,29 @@
                 $('#deputyAck').prop('checked', data.deputyAck === 'true');
                 $('#deputyComment').val(data.deputyComment || '');
 				
-				// ========== START: MODIFICATION (Req 2) - Set TomSelect value ==========
-                if (tomSelectDeputyAssign) {
-                    tomSelectDeputyAssign.setValue(data.deputyAssign || '');
+                // ========== START: MODIFICATION (Reset TomSelect/Readonly state) ==========
+                const deputyAssignedName = data.deputyAssign || '';
+                const deputyAssignSelect = document.getElementById('deputyAssign');
+                const deputyAssignReadonly = $('#deputyAssignReadonly');
+
+                if (isCompleted || isDeputySaved) {
+                    // ถ้าเสร็จสิ้น หรือ บันทึกรองฯ แล้ว -> แสดง Readonly
+                    if (deputyAssignSelect && deputyAssignSelect.tomselect) {
+                        $(deputyAssignSelect.tomselect.wrapper).addClass('d-none'); // ซ่อน TomSelect
+                    }
+                    deputyAssignReadonly.val(deputyAssignedName).removeClass('d-none'); // แสดง Readonly
+                } else {
+                    // ถ้ายังไม่บันทึก -> แสดง TomSelect
+                    if (deputyAssignSelect && deputyAssignSelect.tomselect) {
+                        $(deputyAssignSelect.tomselect.wrapper).removeClass('d-none'); // แสดง TomSelect
+                        deputyAssignSelect.tomselect.setValue(deputyAssignedName, true); // silent update
+                        deputyAssignSelect.tomselect.enable(); // Make sure it's enabled
+                    }
+                    deputyAssignReadonly.addClass('d-none').val(''); // ซ่อน Readonly
                 }
                 // ========== END: MODIFICATION ==========
-				
-				
-                $('#deputyAssign').val(data.deputyAssign || '');
+                
+                //$('#deputyAssign').val(data.deputyAssign || ''); // <-- This old line is replaced by the logic above
                 // (Recorder ID is reset above)
                 
                 // START: MODIFICATION (Req 3) - Show/hide icon vs checkbox
@@ -2821,7 +2905,7 @@
             });
             // ========== END: MODIFICATION ==========
 
-            // ========== START: MODIFICATION - Rewrite Save Button Logic (Req 1) ==========
+             // ========== START: MODIFICATION - Rewrite Save Button Logic (Req 1 & 2) ==========
             $('#saveStatusModalBtn').on('click', function() {
                 const action = $(this).data('action');
                 const docId = $('#statusDocId').val();
@@ -2834,32 +2918,78 @@
                         return;
                     }
 
-                    // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client
-                    const validDeputy = allUsersData.find(u => u.password === deputyPassword && u.role === 'SubDirector');
-                    if (!validDeputy) {
-                        showError('รหัสผู้บันทึก (รองฯ) ไม่ถูกต้อง หรือไม่มีสิทธิ์');
+                    // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client (แก้ไขตามคำขอ)
+                    const deputyAssignName = tomSelectDeputyAssign ? tomSelectDeputyAssign.getValue() : ''; // <-- ดึงชื่อจากช่อง "มอบหมาย"
+                    if (!deputyAssignName) {
+                        showError('กรุณาเลือก "มอบหมาย (ผู้รับผิดชอบ)" ในแท็บความเห็นรองฯ ก่อน');
                         return;
                     }
+                    
+                    // ========== START: MODIFICATION (อัปเดตตามคำขอล่าสุด - ไม่ตรวจสอบชื่อ สกุล) ==========
+                    // ตรวจสอบ 3 อย่าง: password, group, role
+                    const validDeputy = allUsersData.find(u => 
+                        u.password === deputyPassword &&         // 1. ตรวจสอบ password
+                        u.group === 'รองผู้อำนวยการโรงเรียน' && // 2. ตรวจสอบ กลุ่มงาน
+                        u.role === 'SubDirector'                 // 3. ตรวจสอบ role
+                    );
+                    
+                    if (!validDeputy) {
+                        // อัปเดตข้อความแจ้งเตือนให้สะท้อนเงื่อนไขใหม่
+                        showError('รหัสผู้บันทึก (รองฯ) ไม่ถูกต้อง');
+                        return;
+                    }
+                    // ========== END: MODIFICATION (อัปเดตตามคำขอล่าสุด - ไม่ตรวจสอบชื่อ สกุล) ==========
 
                     const formData = new FormData();
                     formData.append('action', 'saveDeputyComment');
                     formData.append('id', docId);
                     formData.append('deputyAck', $('#deputyAck').is(':checked'));
                     formData.append('deputyComment', $('#deputyComment').val());
-                    // (Req 2) อ่านค่าจาก TomSelect
-                    formData.append('deputyAssign', tomSelectDeputyAssign ? tomSelectDeputyAssign.getValue() : '');
-                    formData.append('deputyRecorderId', deputyPassword); // ส่งรหัสที่ตรวจสอบแล้ว
+                    formData.append('deputyAssign', deputyAssignName); // (Req 2) อ่านค่าจาก TomSelect
+                    formData.append('deputyRecorderId', deputyPassword); 
 
                     showLoading('กำลังบันทึกความเห็นรองฯ...');
                     fetch(WEB_APP_URL, { method: 'POST', body: formData })
                         .then(res => res.json())
                         .then(res => {
                             if (!res.success) throw new Error(res.message);
-                            // ... (ส่วนแสดง checkmark ... คงเดิม)
                             showSuccess('บันทึกความเห็นรองฯ เรียบร้อย');
+			
+
+			
+							
+                            // ========== START: MODIFICATION (เปลี่ยน TomSelect เป็น Readonly Input) ==========
+                            // 1. ปิด fieldset (ซึ่งจะปิด checkbox และ textarea)
+                            $('#deputyFieldset').prop('disabled', true);
+                            
+                            // 2. ดึงค่าชื่อที่บันทึก (Text value)
+                            // (ใช้ deputyAssignName ที่ประกาศไว้ด้านบนแล้ว)
+                            
+                            // 3. ซ่อน TomSelect
+                            const deputyAssignSelect = document.getElementById('deputyAssign');
+                            if (deputyAssignSelect && deputyAssignSelect.tomselect) {
+                                $(deputyAssignSelect.tomselect.wrapper).addClass('d-none');
+                                // ไม่ต้อง disable หรือ destroy, แค่ซ่อน
+                            }
+                        
+                            // 4. แสดงและตั้งค่า readonly input
+                            $('#deputyAssignReadonly').val(deputyAssignName).removeClass('d-none');
+                            
+                            // 5. ซ่อนปุ่มบันทึก
+                            $('#saveStatusModalBtn').hide();
+                            $('#deputyRecorderIdContainer').addClass('d-none');
+                            
+                            // 6. แสดงไอคอน check บน tab
+                            $('#statusModal .deputy-saved-check').removeClass('d-none');
+                            // 7. แสดงไอคอน check ข้างใน tab
+                            $('#deputyAck').addClass('d-none'); // Hide checkbox
+                            $('#statusTabDeputyComment .deputy-saved-icon').removeClass('d-none'); // Show icon
+                            // ========== END: MODIFICATION ==========
+							
+							
                             setTimeout(() => {
                                 statusModal.hide();
-                                loadInitialData(); // Reload data
+                                loadInitialData(); 
                             }, 1000); 
                         }).catch(err => showError(err.message));
 
@@ -2877,11 +3007,21 @@
                         return;
                     }
 
-                    // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client (สมมติว่า 'ผู้บันทึก' คือ 'Officer')
-                    //const validRecorder = allUsersData.find(u => u.password === recorderPassword && u.role === 'User');
-					const validRecorder = allUsersData.find(u => u.password === recorderPassword && (u.role === 'User' || u.role === 'Officer'));
+                    // (Req 2) ตรวจสอบรหัสผ่านฝั่ง Client (แก้ไขตามคำขอ)
+                    const responsiblePersonName = $('#responsiblePerson').val(); // <-- ดึงชื่อจากช่อง "ผู้รับผิดชอบ"
+                    if (!responsiblePersonName) {
+                        showError('ไม่พบ "ผู้รับผิดชอบ" (กรุณาตรวจสอบแท็บความเห็นรองฯ)');
+                        return;
+                    }
+
+                    const validRecorder = allUsersData.find(u => 
+                        u.password === recorderPassword && 
+                        u.name === responsiblePersonName && // <-- (Req 2) ตรวจสอบชื่อ สกุล
+                        (u.role === 'User' || u.role === 'Officer' || u.role === 'SubDirector') // <-- (Req 2) ตรวจสอบ role
+                    );
+                    
                     if (!validRecorder) {
-                        showError('รหัสผู้บันทึกไม่ถูกต้อง หรือไม่มีสิทธิ์');
+                        showError('รหัสผู้บันทึกไม่ถูกต้อง, ชื่อไม่ตรงกับผู้รับผิดชอบ');
                         return;
                     }
 
@@ -2889,8 +3029,20 @@
                     formData.append('action', 'updateStatus');
                     formData.append('id', docId);
                     formData.append('status', newStatus);
-                    // ... (ส่วน dueDate, remarks, responsiblePerson ... คงเดิม)
-                    formData.append('recorderId', recorderPassword); // ส่งรหัสที่ตรวจสอบแล้ว
+                    formData.append('remarks', $('#completionNotes').val());
+                    formData.append('responsiblePerson', responsiblePersonName);
+                    
+					// ========== START: MODIFICATION (แก้ไขตามคำขอล่าสุด) ==========
+                    // 3. วันที่คาดว่าจะเสร็จ
+                    if (newStatus !== 'เสร็จสิ้น') {
+                         // ถ้าสถานะ *ไม่* ใช่ 'เสร็จสิ้น' (เช่น กำลังดำเนินการ) ให้ส่งค่า
+                         formData.append('dueDate', $('#expectedDate').val());
+                    }
+                    // ถ้าสถานะเป็น 'เสร็จสิ้น' เราจะไม่ส่ง 'dueDate' ไปเลย
+                    // Server (GAS) จะไม่ได้รับค่านี้ และจะไม่ลบข้อมูลเดิมในชีต
+                    // ========== END: MODIFICATION (แก้ไขตามคำขอล่าสุด) ==========
+					
+                    formData.append('recorderId', recorderPassword); 
                     
                     showLoading('กำลังอัปเดตสถานะ...');
                     fetch(WEB_APP_URL, { method: 'POST', body: formData })
@@ -2907,10 +3059,14 @@
              $('#saveCommentBtn').on('click', function() {
                 const directorPassword = $('#recordId').val();
 
-                if ( (signaturePad.isEmpty() && !isPreloadedSignature) || !directorPassword) { 
-                    showError('กรุณากรอกข้อมูลให้ครบถ้วน ลงลายมือชื่อ และใส่รหัสบันทึก'); 
+				// ========== START: MODIFICATION (User Request) - ลบการตรวจสอบลายมือชื่อ ==========
+                // if ( (signaturePad.isEmpty() && !isPreloadedSignature) || !directorPassword) { 
+                if ( !directorPassword ) { // ตรวจสอบเฉพาะรหัสบันทึก
+                    // showError('กรุณากรอกข้อมูลให้ครบถ้วน ลงลายมือชื่อ และใส่รหัสบันทึก'); 
+                    showError('กรุณากรอกข้อมูลให้ครบถ้วน และใส่รหัสบันทึก'); // ข้อความแจ้งเตือนใหม่
                     return; 
                 }
+                // ========== END: MODIFICATION (User Request) ==========
 
                 // (Req 1) ตรวจสอบรหัสผ่านฝั่ง Client
                 const validDirector = allUsersData.find(u => u.password === directorPassword && u.role === 'Director');
@@ -2928,7 +3084,12 @@
                 formData.append('directorComment', $('#directorComment').val());
                 formData.append('directorActions', actions);
                 formData.append('commentDate', $('#commentDate').val());
-                formData.append('signature', signaturePad.toDataURL());
+				
+				// ========== START: MODIFICATION (User Request) - ลบการส่งค่าลายมือชื่อ ==========
+                // formData.append('signature', signaturePad.toDataURL()); 
+                formData.append('signature', ''); // ส่งค่าว่างไปแทน
+                // ========== END: MODIFICATION (User Request) ==========
+				
                 formData.append('forwardTo', $('#commentForwardTo').val());
                 formData.append('recordId', directorPassword); // ส่งรหัสที่ตรวจสอบแล้ว
 
@@ -3171,14 +3332,6 @@
         });
     </script>
     <!-- ========== END: MODIFICATION - Replaced Clock Script ========== -->
+	</div>
     </body>
-    <footer class="text-center no-print" style="background-color:#faff99; padding: 10px; border-top: 1px solid #e0e0e0; font-size: 0.9em; color: #555; width: 100%;">
-        :: Created and Develop by KT|Tanasarn Sirak ::
-        <div>
-            <a href="https://line.me/ti/p/3F7VGrqgUr" target="_blank"><i class="fa-solid fa-comments"></i></a> <a style="color:red;text-decoration:none;font-size:12px" href="https://line.me/ti/p/3F7VGrqgUr" target="_blank"> สอบถาม/แจ้งปัญหา :: <span style="font-size:12px;color:black">KT | Tanasarn Sirak © <span class="buddhist-year"></span></a>
-        </div>
-        <div class="d-flex justify-content-center align-items-center">
-            :: จำนวนผู้ใช้งาน ::<img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=uwgfnf4ee1nu15h57t14a9pnpf2h58za" border="0" title="website counter" alt="website counter" class="ml-2">
-        </div>
-    </footer>
 </html>
